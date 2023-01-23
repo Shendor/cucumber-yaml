@@ -1,0 +1,34 @@
+<idea-plugin>
+    <id>net.lagerwey.cucumber-kotlin</id>
+    <name>Cucumber for Yaml</name>
+
+    <vendor url="https://www.github.com/jlagerweij">
+        shendor
+    </vendor>
+
+    <depends>com.intellij.java</depends>
+    <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>gherkin</depends>
+
+    <extensions defaultExtensionNs="org.jetbrains.plugins.cucumber.steps">
+        <cucumberJvmExtensionPoint id="yaml" implementation="org.shendor.cucumber.yaml.YamlCucumberExtension"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileBasedIndex id="yaml" implementation="org.shendor.cucumber.yaml.YamlCucumberStepIndex"/>
+
+        <pom.declarationSearcher id="yaml" implementation="org.shendor.cucumber.yaml.search.StepDeclarationSearcher"/>
+
+        <referencesSearch id="yaml" implementation="org.shendor.cucumber.yaml.search.StepDefinitionUsageSearcher"/>
+
+        <findUsagesHandlerFactory id="yaml" implementation="org.shendor.cucumber.yaml.search.StepFindUsagesHandlerFactory"/>
+
+        <usageTypeProvider id="yaml" implementation="org.shendor.cucumber.yaml.search.StepUsageTypeProvider"/>
+
+        <codeInsight.lineMarkerProvider
+                implementationClass="org.shendor.cucumber.yaml.search.CucumberToYamlLineMarkerProvider"
+                language="yaml"/>
+    </extensions>
+
+</idea-plugin>
