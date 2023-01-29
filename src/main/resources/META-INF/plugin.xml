@@ -29,6 +29,9 @@
         <codeInsight.lineMarkerProvider
                 implementationClass="org.shendor.cucumber.yaml.search.CucumberToYamlLineMarkerProvider"
                 language="yaml"/>
+
+        <psi.referenceContributor language="JAVA"
+                                  implementation="org.shendor.cucumber.yaml.reference.YamlReferenceContributor"/>
     </extensions>
 
 </idea-plugin>

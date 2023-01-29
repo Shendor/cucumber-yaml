@@ -2,14 +2,8 @@ package org.shendor.cucumber.yaml
 
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleUtilCore
-import com.intellij.openapi.progress.ProgressManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiManager
-import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.search.ProjectScope
-import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.util.indexing.FileBasedIndex
 import org.shendor.cucumber.yaml.steps.YamlStepDefinition
 import org.shendor.cucumber.yaml.steps.YamlStepDefinitionCreator
 import org.jetbrains.plugins.cucumber.BDDFrameworkType
@@ -19,7 +13,6 @@ import org.jetbrains.plugins.cucumber.steps.AbstractCucumberExtension
 import org.jetbrains.plugins.cucumber.steps.AbstractStepDefinition
 import org.jetbrains.yaml.YAMLFileType
 import org.jetbrains.yaml.psi.YAMLFile
-import org.jetbrains.yaml.psi.YAMLSequenceItem
 
 class YamlCucumberExtension : AbstractCucumberExtension() {
     private val stepDefinitionCreator = YamlStepDefinitionCreator()
@@ -53,7 +46,7 @@ class YamlCucumberExtension : AbstractCucumberExtension() {
     }
 
     override fun loadStepsFor(featureFile: PsiFile?, module: Module): MutableList<AbstractStepDefinition> {
-        val fileBasedIndex = FileBasedIndex.getInstance()
+        /*val fileBasedIndex = FileBasedIndex.getInstance()
         val project = module.project
 
         val searchScope = module.getModuleWithDependenciesAndLibrariesScope(true)
@@ -78,12 +71,8 @@ class YamlCucumberExtension : AbstractCucumberExtension() {
                 true
             },
             yamlFiles
-        )
+        )*/
 
-        return elements.mapNotNull { stepElement ->
-            if (CucumberYamlUtil.isStepDefinition(stepElement)) {
-                YamlStepDefinition(stepElement)
-            } else null
-        }.toMutableList()
+        return CucumberYamlUtil.findYamlStepDefs(module).map { YamlStepDefinition(it) }.toMutableList()
     }
 }
