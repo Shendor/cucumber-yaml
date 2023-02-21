@@ -22,7 +22,7 @@ class YamlReference(element: PsiElement, textRange: TextRange) : PsiReferenceBas
         val yamlStepDefs = CucumberYamlUtil.findYamlStepDefs(module!!)
         val results: MutableList<ResolveResult> = ArrayList()
         for (item in yamlStepDefs) {
-            if (testName == CucumberYamlUtil.getStepName(item))
+            if (CucumberYamlUtil.matches(item, testName))
                 results.add(PsiElementResolveResult(item))
         }
         return results.toTypedArray()

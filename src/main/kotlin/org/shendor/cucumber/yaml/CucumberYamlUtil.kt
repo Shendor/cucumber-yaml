@@ -11,12 +11,18 @@ import org.jetbrains.yaml.YAMLFileType
 import org.jetbrains.yaml.psi.YAMLSequenceItem
 import org.shendor.cucumber.yaml.steps.YamlParameterTypeManager
 import org.shendor.cucumber.yaml.steps.YamlStepDefinition
+import java.util.regex.Pattern
 
 object CucumberYamlUtil {
     const val CUCUMBER_PACKAGE = "io.cucumber.java8"
 
     fun isStepDefinition(candidate: YAMLSequenceItem): Boolean {
         return candidate.keysValues.firstOrNull { it.keyText == "test" }?.let { true } ?: false
+    }
+
+    fun matches(testStep: YAMLSequenceItem, text: String): Boolean {
+        val regex = getStepNameAsRegex(testStep)
+        return Pattern.matches(regex, text)
     }
 
     fun getStepName(stepDefinition: YAMLSequenceItem): String? {
@@ -31,6 +37,7 @@ object CucumberYamlUtil {
 //            return text
 //        }
 //        return "^$text[\\.:>]$"
+//        return CucumberUtil.buildRegexpFromCucumberExpression("$text\\s*[\\.:>]?", YamlParameterTypeManager)
         val text = getStepName(stepDefinition) ?: ""
         if (text.startsWith(YamlStepDefinition.REGEX_START) || text.endsWith(YamlStepDefinition.REGEX_END)) {
             return text
