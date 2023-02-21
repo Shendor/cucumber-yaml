@@ -37,7 +37,7 @@ class StepDefinitionUsageSearcher : QueryExecutorBase<PsiReference, ReferencesSe
                 CucumberUtil.findGherkinReferencesToElement(
                     element as YAMLSequenceItem,
 //                YamlTestCasePsiElement(declaration.element as YAMLSequenceItem),
-                    stepName,
+                    "^$stepName[\\.:>]?$",
 //                "$name[\\.:>]",
                     consumer,
                     queryParameters.effectiveSearchScope

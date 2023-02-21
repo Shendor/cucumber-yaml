@@ -42,6 +42,15 @@ object CucumberYamlUtil {
         if (text.startsWith(YamlStepDefinition.REGEX_START) || text.endsWith(YamlStepDefinition.REGEX_END)) {
             return text
         }
+//        return CucumberUtil.buildRegexpFromCucumberExpression(text, YamlParameterTypeManager)
+         return "^$text[\\.:>]?$"
+    }
+
+    fun getStepNameAsRegex2(stepDefinition: YAMLSequenceItem): String {
+        val text = getStepName(stepDefinition) ?: ""
+        if (text.startsWith(YamlStepDefinition.REGEX_START) || text.endsWith(YamlStepDefinition.REGEX_END)) {
+            return text
+        }
         return CucumberUtil.buildRegexpFromCucumberExpression(text, YamlParameterTypeManager)
     }
 

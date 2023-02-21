@@ -17,17 +17,7 @@ class YamlStepDefinition(private val method: YAMLSequenceItem) : AbstractStepDef
     override fun getVariableNames() = emptyList<String>()
 
     override fun getCucumberRegexFromElement(element: PsiElement?): String? {
-//        var text = getStepDefinitionText() ?: return null
-//        text = PARAM_REPLACEMENT_PATTERN.matcher(text).replaceAll("(.+)")
-//        if (text.startsWith(REGEX_START) || text.endsWith(REGEX_END)) {
-//            return text
-//        }
-//        return "^$text[\\.:>]$"
-        val text = getStepDefinitionText() ?: return null
-        if (text.startsWith(REGEX_START) || text.endsWith(REGEX_END)) {
-            return text
-        }
-        return CucumberUtil.buildRegexpFromCucumberExpression(text, YamlParameterTypeManager)
+        return CucumberYamlUtil.getStepNameAsRegex(element as YAMLSequenceItem)
     }
 
     private fun getStepDefinitionText(): String? {
