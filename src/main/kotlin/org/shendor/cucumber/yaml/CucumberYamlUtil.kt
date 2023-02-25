@@ -15,6 +15,7 @@ const val TEST_STEP_SPECIAL_CHARS_REGEX = "[\\.:>]?"
 
 object CucumberYamlUtil {
     const val CUCUMBER_PACKAGE = "io.cucumber.java8"
+    private val PARAM_REPLACEMENT_PATTERN: Pattern = Pattern.compile("<[^>]+>")
 
     fun isStepDefinition(candidate: YAMLSequenceItem): Boolean {
         return candidate.keysValues.firstOrNull { it.keyText == "test" }?.let { true } ?: false
@@ -31,11 +32,12 @@ object CucumberYamlUtil {
     }
 
     fun getStepNameAsRegex(stepDefinition: YAMLSequenceItem): String {
-        val text = getStepName(stepDefinition) ?: ""
+        var text = getStepName(stepDefinition) ?: ""
+        text = PARAM_REPLACEMENT_PATTERN.matcher(text).replaceAll("(.+)")
         if (text.startsWith(YamlStepDefinition.REGEX_START) || text.endsWith(YamlStepDefinition.REGEX_END)) {
             return text
         }
-         return "^$text$TEST_STEP_SPECIAL_CHARS_REGEX$"
+        return "^$text$TEST_STEP_SPECIAL_CHARS_REGEX$"
     }
 
     fun findYamlStepDefs(module: com.intellij.openapi.module.Module): List<YAMLSequenceItem> {

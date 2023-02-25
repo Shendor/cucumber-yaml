@@ -10,7 +10,6 @@ import net.lagerwey.plugins.cucumber.kotlin.inReadAction
 import org.jetbrains.plugins.cucumber.CucumberUtil
 import org.jetbrains.yaml.psi.YAMLSequenceItem
 import org.shendor.cucumber.yaml.CucumberYamlUtil
-import org.shendor.cucumber.yaml.TEST_STEP_SPECIAL_CHARS_REGEX
 
 class StepDefinitionUsageSearcher : QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>() {
     override fun processQuery(
@@ -19,22 +18,18 @@ class StepDefinitionUsageSearcher : QueryExecutorBase<PsiReference, ReferencesSe
     ) {
         val elementToSearch = queryParameters.elementToSearch
         var element: PsiElement = queryParameters.elementToSearch
-        var stepName = ""
         if (elementToSearch is PomTargetPsiElement) {
             val declaration = elementToSearch.target
             if (declaration is YamlStepDeclaration) {
                 element = declaration.element
-                stepName = declaration.stepName
             }
-        } else if (element is YAMLSequenceItem) {
-            stepName = CucumberYamlUtil.getStepName(element) ?: "none"
         }
 
         if (element is YAMLSequenceItem) {
             inReadAction {
                 CucumberUtil.findGherkinReferencesToElement(
                     element,
-                    "^$stepName$TEST_STEP_SPECIAL_CHARS_REGEX$",
+                    CucumberYamlUtil.getStepNameAsRegex(element),
                     consumer,
                     queryParameters.effectiveSearchScope
                 )
