@@ -5,20 +5,14 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
-import org.jetbrains.kotlin.asJava.classes.KtLightClassForSourceDeclaration
-import org.jetbrains.kotlin.idea.core.appendElement
+import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import org.jetbrains.kotlin.idea.util.sourceRoots
-import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.plugins.cucumber.AbstractStepDefinitionCreator
 import org.jetbrains.plugins.cucumber.psi.GherkinFile
 import org.jetbrains.plugins.cucumber.psi.GherkinStep
-import org.jetbrains.yaml.YAMLTextUtil
-import org.jetbrains.yaml.YAMLUtil
+import org.jetbrains.yaml.YAMLElementGenerator
 import org.jetbrains.yaml.psi.YAMLFile
-import org.jetbrains.yaml.psi.impl.YAMLKeyValueImpl
-import org.jetbrains.yaml.psi.impl.YAMLSequenceItemImpl
 
 class YamlStepDefinitionCreator : AbstractStepDefinitionCreator() {
     private var lastObservedLanguage = "en"
@@ -26,8 +20,18 @@ class YamlStepDefinitionCreator : AbstractStepDefinitionCreator() {
     override fun createStepDefinitionContainer(directory: PsiDirectory, name: String): PsiFile {
         val file = directory.createFile(name) as YAMLFile
 
-//        runWriteAction {
-//            file.add(YAMLKeyValueImpl())
+//        val root = (file.documents[0] as YAMLDocument)!!
+//
+//        assert(key.size > 0)
+//
+//        var rootMapping = PsiTreeUtil.findChildOfType(
+//            root,
+//            YAMLMapping::class.java
+//        )
+//        if (rootMapping == null) {
+//            val yamlFile = YAMLElementGenerator.getInstance(file.project).createDummyYamlWithText(key.get(0) + ":")
+//            val mapping = ((yamlFile.documents[0] as YAMLDocument).topLevelValue as YAMLMapping?)!!
+//            rootMapping = root!!.add(mapping!!) as YAMLMapping
 //        }
 
         return file
@@ -40,15 +44,12 @@ class YamlStepDefinitionCreator : AbstractStepDefinitionCreator() {
     override fun createStepDefinition(step: GherkinStep, file: PsiFile, withTemplate: Boolean): Boolean {
         val ymlFile = (file as? YAMLFile) ?: return false
 
-//        val expression = ktPsiFactory.createExpression("""
-//            ${step.keyword.text}("${step.name.replace("\"", "\\\"")}") {
-//                TODO("Not yet implemented")
-//            }
-//            """.trimIndent())
-        val expression = YAMLUtil.createI18nRecord(ymlFile, arrayOf("test"), step.name.replace("\"", "\\\""))
+        val yamlElementGenerator = YAMLElementGenerator.getInstance(file.getProject())
+        val emptySequenceItem = yamlElementGenerator.createEmptySequenceItem()
+        emptySequenceItem.add(yamlElementGenerator.createYamlKeyValue("test", step.name))
 
         runWriteAction {
-            ymlFile.add(expression!!)
+            ymlFile.add(emptySequenceItem)
         }
 
         ymlFile.navigate(true)
@@ -71,9 +72,9 @@ class YamlStepDefinitionCreator : AbstractStepDefinitionCreator() {
 
         val stepDir = step.containingFile.containingDirectory
 
-        val sourceRoots = ModuleUtilCore.findModuleForPsiElement(step)?.sourceRoots?: return stepDir
+        val sourceRoots = ModuleUtilCore.findModuleForPsiElement(step)?.sourceRoots ?: return stepDir
         val root = sourceRoots.find { it.path.endsWith("resources") }
-        return PsiManager.getInstance(step.project).findDirectory(root!!)?: return stepDir
+        return PsiManager.getInstance(step.project).findDirectory(root!!) ?: return stepDir
     }
 }
 

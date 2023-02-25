@@ -7,11 +7,10 @@ import com.intellij.psi.PsiReference
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.util.Processor
 import net.lagerwey.plugins.cucumber.kotlin.inReadAction
-import org.shendor.cucumber.yaml.steps.YamlTestCasePsiElement
 import org.jetbrains.plugins.cucumber.CucumberUtil
 import org.jetbrains.yaml.psi.YAMLSequenceItem
 import org.shendor.cucumber.yaml.CucumberYamlUtil
-import org.shendor.cucumber.yaml.steps.YamlStepDefinition
+import org.shendor.cucumber.yaml.TEST_STEP_SPECIAL_CHARS_REGEX
 
 class StepDefinitionUsageSearcher : QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>() {
     override fun processQuery(
@@ -32,13 +31,10 @@ class StepDefinitionUsageSearcher : QueryExecutorBase<PsiReference, ReferencesSe
         }
 
         if (element is YAMLSequenceItem) {
-//        val name = YamlStepDefinition.Companion.PARAM_REPLACEMENT_PATTERN.matcher(stepName).replaceAll("(.+)")
             inReadAction {
                 CucumberUtil.findGherkinReferencesToElement(
-                    element as YAMLSequenceItem,
-//                YamlTestCasePsiElement(declaration.element as YAMLSequenceItem),
-                    "^$stepName[\\.:>]?$",
-//                "$name[\\.:>]",
+                    element,
+                    "^$stepName$TEST_STEP_SPECIAL_CHARS_REGEX$",
                     consumer,
                     queryParameters.effectiveSearchScope
                 )

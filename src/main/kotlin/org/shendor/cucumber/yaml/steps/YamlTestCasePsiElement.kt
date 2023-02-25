@@ -96,8 +96,7 @@ class YamlTestCasePsiElement(private val item: YAMLSequenceItem) : YAMLSequenceI
     }
 
     override fun getText(): String {
-//        return (CucumberYamlUtil.getStepName(this) + " (of ${item.containingFile.name})")
-        return CucumberYamlUtil.getStepName(this) ?: "none"
+        return (CucumberYamlUtil.getStepName(this) + " (of ${item.containingFile.name})")
     }
 
     override fun textToCharArray(): CharArray {

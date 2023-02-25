@@ -11,7 +11,6 @@ class YamlStepDefinition(private val method: YAMLSequenceItem) : AbstractStepDef
     companion object {
         const val REGEX_START = "^"
         const val REGEX_END = "$"
-        val PARAM_REPLACEMENT_PATTERN: Pattern = Pattern.compile("<.+>")
     }
 
     override fun getVariableNames() = emptyList<String>()
@@ -25,8 +24,7 @@ class YamlStepDefinition(private val method: YAMLSequenceItem) : AbstractStepDef
     }
 
     override fun getElement(): PsiElement? {
-        return method
-//        return YamlTestCasePsiElement(method)
+        return YamlTestCasePsiElement(method)
     }
 
     override fun toString(): String {

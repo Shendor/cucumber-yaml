@@ -6,12 +6,12 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.ProjectScope
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.indexing.FileBasedIndex
-import org.jetbrains.plugins.cucumber.CucumberUtil
 import org.jetbrains.yaml.YAMLFileType
 import org.jetbrains.yaml.psi.YAMLSequenceItem
-import org.shendor.cucumber.yaml.steps.YamlParameterTypeManager
 import org.shendor.cucumber.yaml.steps.YamlStepDefinition
 import java.util.regex.Pattern
+
+const val TEST_STEP_SPECIAL_CHARS_REGEX = "[\\.:>]?"
 
 object CucumberYamlUtil {
     const val CUCUMBER_PACKAGE = "io.cucumber.java8"
@@ -31,19 +31,11 @@ object CucumberYamlUtil {
     }
 
     fun getStepNameAsRegex(stepDefinition: YAMLSequenceItem): String {
-        //        var text = getStepDefinitionText() ?: return null
-//        text = PARAM_REPLACEMENT_PATTERN.matcher(text).replaceAll("(.+)")
-//        if (text.startsWith(REGEX_START) || text.endsWith(REGEX_END)) {
-//            return text
-//        }
-//        return "^$text[\\.:>]$"
-//        return CucumberUtil.buildRegexpFromCucumberExpression("$text\\s*[\\.:>]?", YamlParameterTypeManager)
         val text = getStepName(stepDefinition) ?: ""
         if (text.startsWith(YamlStepDefinition.REGEX_START) || text.endsWith(YamlStepDefinition.REGEX_END)) {
             return text
         }
-//        return CucumberUtil.buildRegexpFromCucumberExpression(text, YamlParameterTypeManager)
-         return "^$text[\\.:>]?$"
+         return "^$text$TEST_STEP_SPECIAL_CHARS_REGEX$"
     }
 
     fun findYamlStepDefs(module: com.intellij.openapi.module.Module): List<YAMLSequenceItem> {

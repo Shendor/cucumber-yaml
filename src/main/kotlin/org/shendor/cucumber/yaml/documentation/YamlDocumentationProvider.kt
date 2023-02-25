@@ -22,9 +22,8 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         if (element is YAMLKeyValue) {
             val key = element.keyText
-            val file = SymbolPresentationUtil.getFilePathPresentation(element.getContainingFile())
             val docComment = "keyword description goes here"
-            return renderFullDoc(key, file, docComment)
+            return renderFullDoc(key, docComment)
         }
         return null
     }
@@ -65,7 +64,7 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
      * [com.intellij.lang.documentation.DocumentationProvider.generateDoc] for more
      * information about building the layout.
      */
-    private fun renderFullDoc(key: String, file: String, docComment: String): String {
+    private fun renderFullDoc(key: String, docComment: String): String {
         val sb = StringBuilder()
         sb.append(DocumentationMarkup.DEFINITION_START)
         sb.append("Chronos keyword")
@@ -76,6 +75,7 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
         sb.append(DocumentationMarkup.SECTIONS_START)
         addKeyValueSection("", docComment, sb)
         sb.append(DocumentationMarkup.SECTIONS_END)
+
         return sb.toString()
     }
 }

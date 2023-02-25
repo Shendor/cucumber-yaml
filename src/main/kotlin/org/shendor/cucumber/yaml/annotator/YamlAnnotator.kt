@@ -28,10 +28,9 @@ class YamlAnnotator : Annotator {
 
         val testCases = findTestCaseDefinition(testCaseName, element)
         if (testCases.isEmpty()) {
-            holder.newAnnotation(HighlightSeverity.ERROR, "Test case definition not found")
+            holder.newAnnotation(HighlightSeverity.ERROR, "Chronos Test Case definition not found")
                 .range(testCaseNameRange)
                 .highlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL)
-//                .withFix(YamlCreateTestCaseQuickFix(testCaseName))
                 .create()
         } else {
             holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
