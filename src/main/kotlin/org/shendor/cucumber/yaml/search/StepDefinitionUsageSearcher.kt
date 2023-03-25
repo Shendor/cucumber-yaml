@@ -6,7 +6,6 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.util.Processor
-import net.lagerwey.plugins.cucumber.kotlin.inReadAction
 import org.jetbrains.plugins.cucumber.CucumberUtil
 import org.jetbrains.yaml.psi.YAMLSequenceItem
 import org.shendor.cucumber.yaml.CucumberYamlUtil
@@ -26,14 +25,12 @@ class StepDefinitionUsageSearcher : QueryExecutorBase<PsiReference, ReferencesSe
         }
 
         if (element is YAMLSequenceItem) {
-            inReadAction {
-                CucumberUtil.findGherkinReferencesToElement(
-                    element,
-                    CucumberYamlUtil.getStepNameAsRegex(element),
-                    consumer,
-                    queryParameters.effectiveSearchScope
-                )
-            }
+            CucumberUtil.findGherkinReferencesToElement(
+                element,
+                CucumberYamlUtil.getStepNameAsRegex(element),
+                consumer,
+                queryParameters.effectiveSearchScope
+            )
         }
     }
 }

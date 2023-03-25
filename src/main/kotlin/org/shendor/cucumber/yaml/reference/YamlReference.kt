@@ -9,9 +9,9 @@ import icons.CucumberIcons
 import org.jetbrains.kotlin.idea.base.util.module
 import org.shendor.cucumber.yaml.CucumberYamlUtil
 
-class YamlReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase<PsiElement?>(element, textRange),
+open class YamlReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase<PsiElement?>(element, textRange),
     PsiPolyVariantReference {
-    private val testName: String
+    protected var testName: String
 
     init {
         testName = element.text.substring(textRange.startOffset, textRange.endOffset)

@@ -33,6 +33,9 @@
         <psi.referenceContributor language="JAVA"
                                   implementation="org.shendor.cucumber.yaml.reference.YamlReferenceContributor"/>
 
+        <psi.referenceContributor language="yaml"
+                                  implementation="org.shendor.cucumber.yaml.reference.ParentYamlReferenceContributor"/>
+
         <lang.documentationProvider language="yaml" implementationClass="org.shendor.cucumber.yaml.documentation.YamlDocumentationProvider"/>
 
         <annotator language="JAVA" implementationClass="org.shendor.cucumber.yaml.annotator.YamlAnnotator"/>
