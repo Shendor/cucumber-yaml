@@ -1,0 +1,76 @@
+<p>
+    Identifies test case name. Each test case must have a name as a simple String, for example:
+</p>
+<p>
+    <i>- test: Simple test without parameters</i>
+</p>
+<p>
+    The name can also have parameters, for example:
+</p>
+<p>
+    <i>- test: Simple test with &lt;param1&gt; and &lt;param2&gt;</i>
+    <br>
+    <br>
+    where <i>param1</i> and <i>param2</i> are assigned from Cucumber feature file or from java-based step definition
+    (ex. when executing 'BaseStepDefs.runTestCaseProcessing' method)
+</p>
+<h2>How to run</h2>
+<p>
+<ul>
+    <li>1) From Cucumber feature file. In a step, you should set the exact name as defined in '- test', and it's
+        important
+        to add at the end:
+        <ul>
+            <li>. - if there are no parameters to provide</li>
+            <li>: - if there is Map-like parameters to provide</li>
+            <li>&gt; - if there is DataTable parameters to provide</li>
+        </ul>
+        for example <i>(note the special chars at the end of each steps)</i>:
+        <p>
+            <u>(feature file:)</u>
+            <br>
+            <br>
+            <code>
+                Given something is up and running.
+                <br>
+                When run some request:<br>
+                | param1 | some value |<br>
+                Then verify the response with flag &lt;success&gt; returned&gt;<br>
+                | param1 | param2 | success | <br>
+                | value1 | value2 | true | <br>
+            </code>
+        </p>
+        <p>
+            <u>(YAML file:)</u>
+            <br>
+            <br>
+            <code>
+                - test: something is up and running<br>
+                # some test case properties go here...<br>
+                <br>
+                - test: run some request
+        <div style="text-indent: 10px;"> # some test case properties go here...</div>
+        <div style="text-indent: 10px;">request:</div>
+        <div style="text-indent: 20px;">a: &lt;param1&gt;</div>
+
+        <br>
+        - test: verify the response with flag &lt;success&gt; returned
+        <div style="text-indent: 10px;"> # some test case properties go here...</div>
+        <div style="text-indent: 10px;">request:</div>
+        <div style="text-indent: 20px;">a: &lt;param1&gt;</div>
+        <div style="text-indent: 20px;">b: &lt;param2&gt;</div>
+            </code>
+        </p>
+        <p>
+            These special characters at the end of test step are intended for the framework to differentiate between the step defs
+            defined in YAML and in Java.
+        </p>
+    </li>
+    <li>2) From Java-step definitions. It must extend 'BaseStepDefs' class from Chronos and use the following methods to run the yaml-based test cases:
+    <ul>
+        <li> runTestCaseProcessing(String testCaseName)</li>
+        <li> runTestCaseProcessing(String testCaseName, Map&lt;String, String&gt; parameters</li>
+    </ul>
+    </li>
+</ul>
+</p>

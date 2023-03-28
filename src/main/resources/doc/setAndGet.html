@@ -1,0 +1,11 @@
+<p>
+  Allows to store data in the local test storage in memory, so it can be extracted in other YAML test case using 'get' function, for example:<br>
+    <code>
+field1: setAndGet(key_a:some value)
+    </code><br>
+    this value can be extracted using 'get' function in the same or other following test, for example:<br>
+    <code>
+        field2: get(key_a)
+    </code><br>
+    so the 'field2' will have a value = 'some value'
+</p>

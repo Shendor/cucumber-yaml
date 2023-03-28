@@ -1,0 +1,8 @@
+<p>
+    A payload for the test case (optional).<br>
+    The payload is converted to json automatically when processed, unless the property <i>'format'</i> is defined.<br>
+    The payload is represented as <code>Map&lt;String,String&gt;</code> or <code>List&lt;Map&lt;String,String&gt;</code>,
+    thus it can be converted to json by the default serializer, or passed to a serializer defined in <i>'format'</i> property.<br>
+    Then, this serialized payload (ex. <code>String</code>) is processed based on the logic of the specific test case.<br>
+    <i>(ex. if it's HTTP-based test case, then it's transferred as body of the request)</i>
+</p>

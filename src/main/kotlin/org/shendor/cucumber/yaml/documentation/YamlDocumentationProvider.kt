@@ -22,8 +22,8 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         if (element is YAMLKeyValue) {
             val key = element.keyText
-            val docComment = "keyword description goes here"
-            return renderFullDoc(key, docComment)
+            val text = YamlDocumentationProvider::class.java.getResource("/doc/$key.html")?.readText()
+            return text?.let { renderFullDoc(key, text) }
         }
         return null
     }
@@ -48,18 +48,6 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
     }
 
     /**
-     * Creates a key/value row for the rendered documentation.
-     */
-    private fun addKeyValueSection(key: String, value: String, sb: StringBuilder) {
-        sb.append(DocumentationMarkup.SECTION_HEADER_START)
-        sb.append(key)
-        sb.append(DocumentationMarkup.SECTION_SEPARATOR)
-        sb.append("<p>")
-        sb.append(value)
-        sb.append(DocumentationMarkup.SECTION_END)
-    }
-
-    /**
      * Creates the formatted documentation using [DocumentationMarkup]. See the Java doc of
      * [com.intellij.lang.documentation.DocumentationProvider.generateDoc] for more
      * information about building the layout.
@@ -67,14 +55,11 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
     private fun renderFullDoc(key: String, docComment: String): String {
         val sb = StringBuilder()
         sb.append(DocumentationMarkup.DEFINITION_START)
-        sb.append("Chronos keyword")
+        sb.append("Chronos keyword: $key")
         sb.append(DocumentationMarkup.DEFINITION_END)
         sb.append(DocumentationMarkup.CONTENT_START)
-        sb.append(key)
+        sb.append(docComment)
         sb.append(DocumentationMarkup.CONTENT_END)
-        sb.append(DocumentationMarkup.SECTIONS_START)
-        addKeyValueSection("", docComment, sb)
-        sb.append(DocumentationMarkup.SECTIONS_END)
 
         return sb.toString()
     }
