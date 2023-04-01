@@ -1,0 +1,19 @@
+<h4>DB Test Case property</h4>
+<p>
+   This payload is represented as a list of columns, which is used to compose a SQL query when processing this test case.<br>
+    In this particular example, the composed query will look like this <i>(if 'sql' property not defined)</i><br>
+    <i>SELECT * FROM table_a WHERE columns_a:=column_a AND column_b LIKE %:column_b% AND column_c <= :column_c</i><br>
+    and the parameters are assigned based on their names.<br>
+
+    <code>
+        - test: find data
+<div style="text-indent: 10px;">db_command: find</div>
+<div style="text-indent: 10px;">table: table_a</div>
+<div style="text-indent: 10px;">expected columns:</div>
+<div style="text-indent: 20px;">column_a: value 1</div>
+<div style="text-indent: 20px;">column_b: %value 2%</div>
+<div style="text-indent: 20px;"> column_c:</div>
+<div style="text-indent: 30px;">comparator: "<="</div>
+<div style="text-indent: 30px;">value: now(UTC)</div>
+    </code><br>
+</p>
