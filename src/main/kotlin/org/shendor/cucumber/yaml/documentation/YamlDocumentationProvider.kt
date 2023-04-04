@@ -3,8 +3,11 @@ package org.shendor.cucumber.yaml.documentation
 import com.intellij.lang.documentation.AbstractDocumentationProvider
 import com.intellij.lang.documentation.DocumentationMarkup
 import com.intellij.psi.PsiElement
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.presentation.java.SymbolPresentationUtil
+import com.intellij.psi.util.elementType
 import org.jetbrains.yaml.psi.YAMLKeyValue
+import org.jetbrains.yaml.psi.YAMLValue
 
 class YamlDocumentationProvider : AbstractDocumentationProvider() {
 
@@ -37,12 +40,16 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
      * a formatted representation of the information.
      */
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
+        var key: String? = null
         if (element is YAMLKeyValue) {
-            val key = nameToFile[element.keyText] ?: element.keyText
-            val text = YamlDocumentationProvider::class.java.getResource("/doc/$key.html")?.readText()
-            return text?.let { renderFullDoc(key, text) }
+            key = nameToFile[element.keyText] ?: element.keyText
+        } else if (originalElement is LeafPsiElement && "text" == originalElement.elementType.toString()) {
+            key = originalElement.text.substringBefore('(', "")
         }
-        return null
+        return key?.let {
+            val text = YamlDocumentationProvider::class.java.getResource("/doc/$key.html")?.readText()
+            text?.let { renderFullDoc(key, text) }
+        }
     }
 
     /**
