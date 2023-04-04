@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-// template: https://github.com/JetBrains/intellij-platform-plugin-template/blob/main/build.gradle.kts
 
 plugins {
     java
@@ -11,7 +10,6 @@ val jetbrainsPublishToken: String by project
 
 val pluginVersion: String by project
 
-// See: https://github.com/JetBrains/gradle-intellij-plugin/ and https://github.com/JetBrains/intellij-platform-plugin-template
 intellij {
     pluginName.set("cucumber-yaml")
     version.set(ideaVersion)
@@ -29,17 +27,27 @@ intellij {
         "2022.1" -> "gherkin:221.5080.126"
         "2022.2" -> "gherkin:222.3345.118"
         "2022.3" -> "gherkin:223.7571.113"
-        "201.8743.12" -> "gherkin:201.8538.45"
+        "201.8743.12" -> "gherkin:202.6397.21"
         else -> ""
     }
-//    val yamlPlugin = when (ideaVersion) {
-//        "2021.1" -> "org.jetbrains.plugins.yaml:211.7142.37"
-//        else -> ""
-//    }
+    val yamlPlugin = when (ideaVersion) {
+        "2020.2" -> "org.jetbrains.plugins.yaml:202.6397.21"
+        "2020.3" -> "org.jetbrains.plugins.yaml:203.5981.37"
+        "2021.1" -> "org.jetbrains.plugins.yaml:211.6693.44"
+        "2021.2" -> "org.jetbrains.plugins.yaml:212.4746.16"
+        "2021.3" -> "org.jetbrains.plugins.yaml:213.5744.9"
+        "2022.1" -> "org.jetbrains.plugins.yaml:221.5080.106"
+        "2022.2" -> "org.jetbrains.plugins.yaml:222.3345.35"
+        "2022.3" -> "org.jetbrains.plugins.yaml:223.7571.59"
+        "2023.1" -> "org.jetbrains.plugins.yaml:231.8109.126"
+        else -> ""
+    }
+
     plugins.set(
         listOf(
             "com.intellij.java",
-            "org.jetbrains.plugins.yaml:223.7571.125",
+            yamlPlugin,
+//            "com.intellij.properties:223.7571.117",
             "Kotlin",
             gherkinPlugin
         )
@@ -82,14 +90,18 @@ tasks {
                 The following coding assistance features are available:
               </p>
               <ul>
-                <li>Navigation in the source code.
+                <li>Navigation from Cucumber feature file to YAML.
+                <li>Navigation from Java step def to YAML.
+                <li>Navigation from YAML to Cucumber.
+                <li>Documentation in tooltips.
+                <li>Keywords autocomplete.
               </ul>
         """
         )
         changeNotes.set(
             """
       <ul>
-        <li><b>1.0.0</b> <em>(2018-03-13)</em> - Initial release</li>
+        <li><b>1.0.0</b> <em>(2023-01-04)</em> - Initial release</li>
       </ul>
     """
         )
