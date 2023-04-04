@@ -16,6 +16,7 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
         nameToFile["assert"] = "validate"
         nameToFile["verify response"] = "validate"
         nameToFile["verify"] = "validate"
+        nameToFile["validates"] = "validate"
 
         nameToFile["request"] = "payload"
         nameToFile["message"] = "payload"
