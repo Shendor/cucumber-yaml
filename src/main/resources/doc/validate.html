@@ -1,4 +1,4 @@
-<p>
+<p style="font-size: 12px">
     Validation details for a result of the test case execution (optional).<br>
     For this property you need to describe the validation rules for the result of test case execution<br>
     This is done by assigning <code>validate(&lt;field or property extractor function&gt;)</code> of the actual value
@@ -14,87 +14,141 @@
 </p>
 
 <p>
-<h3>Supported property extraction functions:</h3>
-<ul>
-    <li>field name - extracts a value from this field name, if the result of test execution is <code>Map&lt;String,String&gt;</code>, ex<br>
+<br>
+<h2>Supported property extraction functions:</h2>
+<ul style="font-size: 12px">
+    <li>
+        <p>
+        <div style="font-weight: bold">field name</div>
+        Extracts a value from this field name, if the result of test execution
+        is
+        <code>Map&lt;String,String&gt;</code>,
+        ex
+        <p>
+            <code>
+                <code style="color: #5e9d41;"># if result is a Map, then the value is extracted from key 'field1' and
+                    compared with text 'expected value'</code><br>
+                <code style="color: #c36229;">validate(field1):</code> expected value
+            </code>
+        </p>
         <code>
-            # if result is a Map, then the value is extracted from key 'field1' and compared with text 'expected value'<br>
-            validate(field1): expected value
+            <code style="color: #5e9d41;"># if result is a List of Map, then the value is extracted by key from each
+                item
+                of list and checked that at
+                least one item complies with the validation rules</code><br>
+            - <code style="color: #c36229;">validate(field2):</code> expected value 1<br>
+            <div style="text-indent: 15px;"><code style="color: #c36229; text-indent: 15px;">validate(field3):</code>
+                expected value 2
+            </div>
         </code>
-        <code>
-            # if result is a List of Map, then the value is extracted by key from each item of list and checked that at least one item complies with the validation rules<br>
-            - validate(field2): expected value 1<br>
-              validate(field3): expected value 2
-        </code>
+        </p>
     </li>
-    <li>json_path(path.to.field) - extracts value from a json result, ex:<br>
-        <code>
-            # if result is a Json String, then the value is extracted from path 'a.b.c' and compared with text 'expected
-            value'<br>
-            validate(json_path(a.b.c)): expected value
-        </code>
+    <li><p>
+        <div style="font-weight: bold">json_path(path.to.field)</div>
+        Extracts value from a json result, ex:
+        <p>
+            <code>
+                <code style="color: #5e9d41;">
+                    # if result is a Json String, then the value is extracted from path 'a.b.c' and compared with text
+                    'expected
+                    value'</code><br>
+                <code style="color: #c36229;">validate(json_path(a.b.c)):</code> expected value
+            </code>
+        </p>
+        </p>
     </li>
-    <li>xpath(/path/to/field) - extracts value from a xml result by xpath, ex:<br>
-        <code>
-            # if result is a XML String, then the value is extracted from path 'a/b/c' and compared with text 'expected
-            value'<br>
-            validate(xpath(a/b/c)): expected value
-        </code></li>
-    <li>response() - extracts the whole result and convert it to String, ex:<br>
-        <code>
-            validate(response()): expected value
-        </code>
+    <li>
+        <p>
+        <div style="font-weight: bold">xpath(/path/to/field)</div>
+        Extracts value from a xml result by xpath, ex:
+        <p>
+            <code>
+                <code style="color: #5e9d41;">
+                    # if result is a XML String, then the value is extracted from path 'a/b/c' and compared with text
+                    'expected
+                    value'</code><br>
+                <code style="color: #c36229;">validate(xpath(a/b/c)):</code> expected value
+            </code>
+        </p>
+        </p>
     </li>
-    <li>SPeL expressions - validates result using Spring Expression Language, ex: <br>
-    <code>
-        # if result is a Java-POJO object with property <code>int statusCode</code>, then this expression checks if it equals to 200<br>
-        validate: "#that(statusCode, 200)"
-    </code>
-        <code>
-            # if result is a Java-POJO object with property <code>String body</code> as Json, then this expression extracts value by json path and checks that
-            it equals to 'expected value'<br>
-            validate: "#that(#jsonPath(body, 'a.b.c'), expected value)"
-        </code>
+    <li>
+        <p>
+        <div style="font-weight: bold">response()</div>
+        - extracts the whole result and convert it to String, ex:<br>
+        <p>
+            <code>
+                <code style="color: #c36229;">validate(response()):</code> expected value
+            </code>
+        </p>
+        </p>
+    </li>
+    <li>
+        <p>
+        <div style="font-weight: bold">SPeL expressions</div>
+        - validates result using Spring Expression Language, ex: <br>
+        <p>
+            <code style="color: #5e9d41;">
+                # if result is a Java-POJO object with property int statusCode, then this expression checks if
+                it equals to 200<br>
+                <code style="color: #c36229;">validate:</code> "#that(statusCode, 200)"
+            </code>
+            <code style="color: #5e9d41;">
+                # if result is a Java-POJO object with property String body as Json, then this expression
+                extracts value by json path and checks that
+                it equals to 'expected value'<br>
+                <code style="color: #c36229;">validate:</code> "#that(#jsonPath(body, 'a.b.c'), expected value)"
+            </code>
+        </p>
+        </p>
     </li>
 </ul>
 </p>
 
 <p>
-<h3>Supported comparators:</h3>
-<ul>
-    <li>equals - default comparator, ex: <br>
+<h2>Supported comparators:</h2>
+<ul style="font-size: 12px">
+    <li><p style="font-weight: bold">equals</p>
+        Default comparator, ex: <br>
         <code>validate(field1): some text</code>
     </li>
     <li>contains(some text) - this comparator checks if String value contains the expected text, ex:<br>
         <code>
-            # the value of the field 'field2' will be converted to String and check if it contains 'some text'<br>
-            validate(field2): contains(some text)
+            <code style="color: #5e9d41;"># the value of the field 'field2' will be converted to String and check if it
+                contains 'some text'</code><br>
+            <code style="color: #c36229;">validate(field2):</code> contains(some text)
         </code>
     </li>
     </li>
-    <li>hasSize(number) - retrieves a size of the actual value and compare it with the expected size, ex:<br>
+    <li><p style="font-weight: bold">hasSize(number)</p>
+        Retrieves a size of the actual value and compare it with the expected size, ex:<br>
         <code>
-            # assuming that the value of the field 'field3' is a <code>List</code> or <code>Map</code>, then it checks
-            whether its size is 1<br>
-            validate(field3): hasSize(1)
+            <code style="color: #5e9d41;"># assuming that the value of the field 'field3' is a List or Map, then it
+                checks
+                whether its size is 1</code><br>
+            <code style="color: #c36229;">validate(field3):</code> hasSize(1)
         </code>
     </li>
-    <li>regex(pattern) - matches the value with the provided regex pattern, ex:<br>
+    <li><p style="font-weight: bold">regex(pattern)</p>
+        Matches the value with the provided regex pattern, ex:<br>
         <code>
-            # the value of the field 'field4' will be converted to String and check if it matches the regex
-            'field_a='[\w\s]+'.*'<br>
-            validate(field4): regex(field_a='[\w\s]+'.*)
+            <code style="color: #5e9d41;"># the value of the field 'field4' will be converted to String and check if it
+                matches the regex
+                'field_a='[\w\s]+'.*'</code><br>
+            <code style="color: #c36229;">validate(field4):</code> regex(field_a='[\w\s]+'.*)
         </code>
     </li>
-    <li>not(comparator function) - negates the verification result of the comparator. You can use any of available
+    <li><p style="font-weight: bold">not(comparator function)</p>
+        Negates the verification result of the comparator. You can use any of available
         comparators inside 'not()', ex:<br>
         <code>
-            validate(field5): not(contains(something))
+            <code style="color: #c36229;">validate(field5):</code> not(contains(something))
         </code>
     </li>
-    <li>OR operator - combines comparators with OR, meaning that at least 1 should pass, ex:<br>
+    <li><p style="font-weight: bold">OR operator</p>
+        Combines comparators with OR, meaning that at least 1 should pass, ex:<br>
         <code>
-            validate(field6): ACCEPT OR AVAILABLE OR NONE
+            <code style="color: #c36229;">validate(field6):</code> ACCEPT OR AVAILABLE OR NONE
         </code>
     </li>
 </ul>

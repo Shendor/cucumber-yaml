@@ -1,25 +1,25 @@
-<h4>Log Test Case property</h4>
-<p>
+<h2>Log Test Case property</h2>
+<p style="font-size: 12px">
    A list of log files per host. The <i>host</i> is a not an actual host name of your remote machine (VM),
     but a name which you use when configuring Log Test Case Processor in the Chronos configuration, where you
     provide connections details (ex. SSH) for each remote VM and link it to a unique host name, which you can reference here.<br>
     You can register as many VMs in the Log Test Case Processor as you need and reference them in YAML test cases,
     to indicate which logs to find the records from. For example:<br>
     <code>
-<div style="text-indent: 10px;">logs:</div>
-<div style="text-indent: 20px;">- host: host_A</div>
-<div style="text-indent: 33px;"> log: home/user1/log1.txt</div>
-<div style="text-indent: 20px;">- host: host_B</div>
-<div style="text-indent: 33px;"> log: home/user2/log1.txt</div>
+<div style="text-indent: 10px;"><span style="color: #c36229;">logs:</span></div>
+<div style="text-indent: 20px;">- <span style="color: #c36229;">host:</span> host_A</div>
+<div style="text-indent: 33px;"> <span style="color: #c36229;">log:</span> home/user1/log1.txt</div>
+<div style="text-indent: 20px;">- <span style="color: #c36229;">host:</span> host_B</div>
+<div style="text-indent: 33px;"> <span style="color: #c36229;">log:</span> home/user2/log1.txt</div>
     </code><br>
 another way to do it:<br>
 <code>
-    <div style="text-indent: 10px;">hosts: host_A,host_B</div>
-    <div style="text-indent: 10px;">logs: home/user1/log1.txt,home/user2/log1.txt</div>
+    <div style="text-indent: 10px;"><span style="color: #c36229;">hosts:</span> host_A,host_B</div>
+    <div style="text-indent: 10px;"><span style="color: #c36229;">logs:</span> home/user1/log1.txt,home/user2/log1.txt</div>
 </code><br>
 if you need to search in one file:<br>
 <code>
-    <div style="text-indent: 10px;">host: host_A</div>
-    <div style="text-indent: 10px;">log: home/user1/log1.txt</div>
+    <div style="text-indent: 10px;"><span style="color: #c36229;">host:</span> host_A</div>
+    <div style="text-indent: 10px;"><span style="color: #c36229;">log:</span> home/user1/log1.txt</div>
 </code><br>
 </p>

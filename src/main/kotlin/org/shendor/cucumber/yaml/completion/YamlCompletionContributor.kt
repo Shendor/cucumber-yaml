@@ -10,13 +10,15 @@ import org.jetbrains.yaml.YAMLTokenTypes
 class YamlCompletionContributor : CompletionContributor() {
 
     companion object {
-        val keywords = listOf("test:", "validate:", "payload:", "body:", "url:", "http_method:", "query:", "form:", "server:",
-            "host:", "hosts:", "log:", "logs:", "command:", "commands:", "db_server:", "table:", "sql:", "channel:",
-            "listening_channel:", "request:", "message:", "respondTo:", "timeout:", "delay:", "attempts:", "expected response:",
-            "expected message:", "expected:",
-            "assert:",
-            "contains()", "regex()", "get()", "setAndGet()", "formatDate()", "now()", "validate():",
-            "validate(json_path()):", "validate(xPath()):")
+        val keywords = listOf("test:", "validate:", "payload:", "body:", "format:",
+            "url:", "http_method:", "query:", "form:", "server:", "timeout:", "tls:", "username:", "password:", "headers:",
+            "host:", "hosts:", "log:", "logs:", "command:", "commands:", "lookup:",
+            "db_server:", "table:", "sql:", "db_command:", "expected columns:",
+            "channel:", "listening_channel:", "request:", "message:", "respondTo:", "receive_timeout:", "delay:", "attempts:", "expected response:",
+            "expected message:", "expected:", "assert:",
+            "contains()", "regex()", "get()", "not()", "setAndGet()", "hasSize(1)", "formatDate()", "now()",
+            "generate()", "increment()", "map()", "list()", "array()", "not()", "encode()",
+            "validate():", "validate(json_path()):", "validate(xpath()):")
     }
 
     init {

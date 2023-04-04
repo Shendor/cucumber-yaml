@@ -7,6 +7,21 @@ import com.intellij.psi.presentation.java.SymbolPresentationUtil
 import org.jetbrains.yaml.psi.YAMLKeyValue
 
 class YamlDocumentationProvider : AbstractDocumentationProvider() {
+
+    private val nameToFile = mutableMapOf<String, String>()
+
+    init {
+        nameToFile["expected response"] = "validate"
+        nameToFile["expected message"] = "validate"
+        nameToFile["assert"] = "validate"
+        nameToFile["verify response"] = "validate"
+        nameToFile["verify"] = "validate"
+
+        nameToFile["request"] = "payload"
+        nameToFile["message"] = "payload"
+        nameToFile["body"] = "payload"
+    }
+
     /**
      * For the Simple Language, we don't have online documentation. However, if your language provides
      * references pages online, URLs for the element can be returned here.
@@ -21,7 +36,7 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
      */
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         if (element is YAMLKeyValue) {
-            val key = element.keyText
+            val key = nameToFile[element.keyText] ?: element.keyText
             val text = YamlDocumentationProvider::class.java.getResource("/doc/$key.html")?.readText()
             return text?.let { renderFullDoc(key, text) }
         }

@@ -1,14 +1,14 @@
-<p>
+<p style="font-size: 12px" xmlns="http://www.w3.org/1999/html">
     Identifies test case name. Each test case must have a name as a simple String, for example:
 </p>
-<p>
-    <i>- test: Simple test without parameters</i>
+<p style="font-size: 12px">
+    <code style="color: #c36229;">- test:</code> Simple test without parameters
 </p>
 <p>
     The name can also have parameters, for example:
 </p>
-<p>
-    <i>- test: Simple test with &lt;param1&gt; and &lt;param2&gt;</i>
+<p style="font-size: 12px">
+    - <code style="color: #c36229;">test:</code> Simple test with &lt;param1&gt; and &lt;param2&gt;
     <br>
     <br>
     where <i>param1</i> and <i>param2</i> are assigned from Cucumber feature file or from java-based step definition
@@ -16,7 +16,7 @@
 </p>
 <h2>How to run</h2>
 <p>
-<ul>
+<ul style="font-size: 12px">
     <li>1) From Cucumber feature file. In a step, you should set the exact name as defined in '- test', and it's
         important
         to add at the end:
@@ -31,11 +31,11 @@
             <br>
             <br>
             <code>
-                Given something is up and running.
+                <code style="color: #c36229;">Given</code> something is up and running.
                 <br>
-                When run some request:<br>
+                <code style="color: #c36229;">When</code> run some request:<br>
                 | param1 | some value |<br>
-                Then verify the response with flag &lt;success&gt; returned&gt;<br>
+                <code style="color: #c36229;">Then</code> verify the response with flag &lt;success&gt; returned&gt;<br>
                 | param1 | param2 | success | <br>
                 | value1 | value2 | true | <br>
             </code>
@@ -45,20 +45,20 @@
             <br>
             <br>
             <code>
-                - test: something is up and running<br>
-                # some test case properties go here...<br>
+                - <code style="color: #c36229;">test:</code> something is up and running<br>
+                <code style="color: #5e9d41;"># some test case properties go here...</code><br>
                 <br>
-                - test: run some request
-        <div style="text-indent: 10px;"> # some test case properties go here...</div>
-        <div style="text-indent: 10px;">request:</div>
-        <div style="text-indent: 20px;">a: &lt;param1&gt;</div>
+                - <span style="color: #c36229;">test: run some request</span>
+        <div style="text-indent: 10px;"><code style="color: #5e9d41;"> # some test case properties go here...</code></div>
+        <div style="text-indent: 10px;"><span style="color: #c36229;">request:</span></div>
+        <div style="text-indent: 20px;"><span style="color: #c36229;">a:</span> &lt;param1&gt;</div>
 
         <br>
-        - test: verify the response with flag &lt;success&gt; returned
-        <div style="text-indent: 10px;"> # some test case properties go here...</div>
-        <div style="text-indent: 10px;">request:</div>
-        <div style="text-indent: 20px;">a: &lt;param1&gt;</div>
-        <div style="text-indent: 20px;">b: &lt;param2&gt;</div>
+        - <span style="color: #c36229;">test:</span> verify the response with flag &lt;success&gt; returned
+        <div style="text-indent: 10px;"><code style="color: #5e9d41;"> # some test case properties go here...</code></div>
+        <div style="text-indent: 10px;"><span style="color: #c36229;">request:</span></div>
+        <div style="text-indent: 20px;"><span style="color: #c36229;">a:</span> &lt;param1&gt;</div>
+        <div style="text-indent: 20px;"><span style="color: #c36229;">b:</span> &lt;param2&gt;</div>
             </code>
         </p>
         <p>

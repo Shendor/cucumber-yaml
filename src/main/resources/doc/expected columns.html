@@ -1,19 +1,22 @@
-<h4>DB Test Case property</h4>
-<p>
-   This payload is represented as a list of columns, which is used to compose a SQL query when processing this test case.<br>
+<h2>DB Test Case property</h2>
+<p style="font-size: 12px">
+    This payload is represented as a list of columns, which is used to compose a SQL query when processing this test
+    case.<br>
     In this particular example, the composed query will look like this <i>(if 'sql' property not defined)</i><br>
-    <i>SELECT * FROM table_a WHERE columns_a:=column_a AND column_b LIKE %:column_b% AND column_c <= :column_c</i><br>
+    <i style="color: #5e9d41;">SELECT * FROM table_a WHERE columns_a:=column_a AND column_b LIKE %:column_b% AND
+        column_c <= :column_c</i><br>
     and the parameters are assigned based on their names.<br>
-
-    <code>
-        - test: find data
-<div style="text-indent: 10px;">db_command: find</div>
-<div style="text-indent: 10px;">table: table_a</div>
-<div style="text-indent: 10px;">expected columns:</div>
-<div style="text-indent: 20px;">column_a: value 1</div>
-<div style="text-indent: 20px;">column_b: %value 2%</div>
-<div style="text-indent: 20px;"> column_c:</div>
-<div style="text-indent: 30px;">comparator: "<="</div>
-<div style="text-indent: 30px;">value: now(UTC)</div>
-    </code><br>
+<p>
+    <code style="font-size: 16px">
+<div>- <span style="color: #c36229;">test:</span> find data</div>
+<div style="text-indent: 10px;"><span style="color: #c36229;">db_command:</span> find</div>
+<div style="text-indent: 10px;"><span style="color: #c36229;">table:</span> table_a</div>
+<div style="text-indent: 10px;"><span style="color: #c36229;">expected columns:</span></div>
+<div style="text-indent: 20px;"><span style="color: #c36229;">column_a:</span> value 1</div>
+<div style="text-indent: 20px;"><span style="color: #c36229;">column_b:</span> %value 2%</div>
+<div style="text-indent: 20px;"><span style="color: #c36229;">column_c:</span></div>
+<div style="text-indent: 30px;"><span style="color: #c36229;">comparator:</span> "<="</div>
+<div style="text-indent: 30px;"><span style="color: #c36229;">value:</span> now(UTC)</div>
+</code>
+</p>
 </p>
