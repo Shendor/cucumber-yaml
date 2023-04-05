@@ -1,5 +1,6 @@
 package org.shendor.cucumber.yaml.search
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.pom.PomTargetPsiElement
 import com.intellij.psi.PsiElement
@@ -25,12 +26,23 @@ class StepDefinitionUsageSearcher : QueryExecutorBase<PsiReference, ReferencesSe
         }
 
         if (element is YAMLSequenceItem) {
-            CucumberUtil.findGherkinReferencesToElement(
-                element,
-                CucumberYamlUtil.getStepNameAsRegex(element),
-                consumer,
-                queryParameters.effectiveSearchScope
-            )
+            inReadAction {
+                CucumberUtil.findGherkinReferencesToElement(
+                    element,
+                    CucumberYamlUtil.getStepNameAsRegex(element),
+                    consumer,
+                    queryParameters.effectiveSearchScope
+                )
+            }
         }
     }
+
+    private fun <T> inReadAction(body: () -> T): T {
+        return ApplicationManager.getApplication().run {
+            if (isReadAccessAllowed) {
+                body()
+            } else runReadAction<T>(body)
+        }
+    }
+
 }

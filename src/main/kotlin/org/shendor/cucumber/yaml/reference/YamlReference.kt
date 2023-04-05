@@ -36,17 +36,21 @@ open class YamlReference(element: PsiElement, textRange: TextRange) : PsiReferen
     }
 
     override fun getVariants(): Array<Any> {
-        val module = myElement!!.module!!
-        val yamlStepDefs = CucumberYamlUtil.findYamlStepDefs(module)
         val variants = mutableListOf<LookupElement>()
-        for (item in yamlStepDefs) {
-            val stepName = CucumberYamlUtil.getStepName(item)
-            if (!stepName.isNullOrEmpty())
-                variants.add(
-                    LookupElementBuilder
-                        .create(item.text).withIcon(CucumberIcons.Cucumber)
-                        .withTypeText(item.containingFile.name)
-                )
+        if (myElement != null) {
+            val module = ModuleUtilCore.findModuleForPsiElement(myElement!!)
+            module?.let {
+                val yamlStepDefs = CucumberYamlUtil.findYamlStepDefs(module)
+                for (item in yamlStepDefs) {
+                    val stepName = CucumberYamlUtil.getStepName(item)
+                    if (!stepName.isNullOrEmpty())
+                        variants.add(
+                            LookupElementBuilder
+                                .create(item.text).withIcon(CucumberIcons.Cucumber)
+                                .withTypeText(item.containingFile.name)
+                        )
+                }
+            }
         }
         return variants.toTypedArray()
     }

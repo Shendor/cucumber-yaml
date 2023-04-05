@@ -5,9 +5,12 @@ import com.intellij.lang.documentation.DocumentationMarkup
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.presentation.java.SymbolPresentationUtil
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
 import org.jetbrains.yaml.psi.YAMLKeyValue
+import org.jetbrains.yaml.psi.YAMLSequenceItem
 import org.jetbrains.yaml.psi.YAMLValue
+import org.shendor.cucumber.yaml.CucumberYamlUtil
 
 class YamlDocumentationProvider : AbstractDocumentationProvider() {
 
@@ -41,8 +44,13 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
      */
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         var key: String? = null
+
         if (element is YAMLKeyValue) {
-            key = nameToFile[element.keyText] ?: element.keyText
+            val isTestStep = PsiTreeUtil.getTopmostParentOfType(element, YAMLSequenceItem::class.java)
+                ?.let { CucumberYamlUtil.isStepDefinition(it) } ?: false
+            if (isTestStep) {
+                key = nameToFile[element.keyText] ?: element.keyText
+            }
         } else if (originalElement is LeafPsiElement && "text" == originalElement.elementType.toString()) {
             key = originalElement.text.substringBefore('(', "")
         }

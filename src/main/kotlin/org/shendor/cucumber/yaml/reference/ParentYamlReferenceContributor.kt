@@ -16,9 +16,9 @@ class ParentYamlReferenceContributor : PsiReferenceContributor() {
                     context: ProcessingContext
                 ): Array<PsiReference> {
                     val value = getStepDefName(element)
-                    if (value != null) {
+                    if (value != null && (element as YAMLKeyValue).value != null) {
                         val property = TextRange(0, value.length)
-                        return arrayOf(YamlReference((element as YAMLKeyValue).value!!, property))
+                        return arrayOf(YamlReference(element.value!!, property))
                     }
                     return PsiReference.EMPTY_ARRAY
                 }
