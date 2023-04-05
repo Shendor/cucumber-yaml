@@ -40,12 +40,14 @@ class YamlAnnotator : Annotator {
 
     fun findTestCaseDefinition(testName: String, element: PsiElement): Array<ResolveResult> {
         val module = ModuleUtilCore.findModuleForPsiElement(element)
-        val yamlStepDefs = CucumberYamlUtil.findYamlStepDefs(module!!)
-        val results: MutableList<ResolveResult> = ArrayList()
-        for (item in yamlStepDefs) {
-            if (CucumberYamlUtil.matches(item, testName))
-                results.add(PsiElementResolveResult(item))
-        }
-        return results.toTypedArray()
+        return module?.let {
+            val yamlStepDefs = CucumberYamlUtil.findYamlStepDefs(it)
+            val results: MutableList<ResolveResult> = ArrayList()
+            for (item in yamlStepDefs) {
+                if (CucumberYamlUtil.matches(item, testName))
+                    results.add(PsiElementResolveResult(item))
+            }
+             results.toTypedArray()
+        } ?: emptyArray()
     }
 }

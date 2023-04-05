@@ -10,7 +10,7 @@ import org.jetbrains.yaml.YAMLTokenTypes
 class YamlCompletionContributor : CompletionContributor() {
 
     companion object {
-        val keywords = listOf("test:", "validate:", "payload:", "body:", "format:",
+        val keywords = listOf("test:", "parent", "validate:", "payload:", "body:", "format:",
             "url:", "http_method:", "query:", "form:", "server:", "timeout:", "tls:", "username:", "password:", "headers:",
             "host:", "hosts:", "log:", "logs:", "command:", "commands:", "lookup:",
             "db_server:", "table:", "sql:", "db_command:", "expected columns:",

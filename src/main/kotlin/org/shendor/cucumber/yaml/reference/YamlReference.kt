@@ -19,13 +19,15 @@ open class YamlReference(element: PsiElement, textRange: TextRange) : PsiReferen
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
         val module = ModuleUtilCore.findModuleForPsiElement(element)
-        val yamlStepDefs = CucumberYamlUtil.findYamlStepDefs(module!!)
-        val results: MutableList<ResolveResult> = ArrayList()
-        for (item in yamlStepDefs) {
-            if (CucumberYamlUtil.matches(item, testName))
-                results.add(PsiElementResolveResult(item))
-        }
-        return results.toTypedArray()
+        return module?.let {
+            val yamlStepDefs = CucumberYamlUtil.findYamlStepDefs(it)
+            val results: MutableList<ResolveResult> = ArrayList()
+            for (item in yamlStepDefs) {
+                if (CucumberYamlUtil.matches(item, testName))
+                    results.add(PsiElementResolveResult(item))
+            }
+            results.toTypedArray()
+        } ?: emptyArray()
     }
 
     override fun resolve(): PsiElement? {
