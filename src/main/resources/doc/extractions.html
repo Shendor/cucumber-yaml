@@ -1,0 +1,22 @@
+<p style="font-size: 12px">
+  Extract value from the result of test case execution and stores it in the local test storage in memory, so it can be extracted in other YAML test case using 'get' function, for example:<br>
+<p style="font-size: 12px">
+    For any type of result, you can extract values by json path, for example:
+</p>
+    <code>
+        - <code style="color: #c36229;">extractions:</code><br>
+<div style="text-indent: 15px;"><code style="color: #c36229; text-indent: 15px;">field1:</code> #jsonPath(response.body, a.b.c)</div>
+<div style="text-indent: 15px;"><code style="color: #c36229; text-indent: 15px;">field2:</code> #jsonPath(response.body, a.d[0])</div>
+    </code>
+<br>
+<p style="font-size: 12px">
+    If result is a List of Map, then a value can be extracted this way:
+</p>
+<code>
+    - <code style="color: #c36229;">extractions:</code><br>
+    <div style="text-indent: 15px;"><code style="color: #c36229; text-indent: 15px;">field1:</code> response[0][key_a]</div>
+</code>
+<p style="font-size: 12px">
+    'response' property is mandatory as it stores the actual result of test case execution.
+</p>
+</p>

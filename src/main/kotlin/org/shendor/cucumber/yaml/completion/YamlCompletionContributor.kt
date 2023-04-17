@@ -16,6 +16,7 @@ class YamlCompletionContributor : CompletionContributor() {
             "db_server:", "table:", "sql:", "db_command:", "expected columns:",
             "channel:", "listening_channel:", "request:", "message:", "respondTo:", "receive_timeout:", "delay:", "attempts:", "expected response:",
             "expected message:", "expected:", "assert:",
+            "extractions:",
             "contains()", "regex()", "get()", "not()", "setAndGet()", "hasSize(1)", "formatDate()", "now()",
             "generate()", "increment()", "map()", "list()", "array()", "not()", "encode()",
             "validate():", "validate(json_path()):", "validate(xpath()):")
