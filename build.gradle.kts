@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
-    kotlin("jvm") version "1.7.22"
+    kotlin("jvm") version "1.8.10"
     id("org.jetbrains.intellij") version "1.10.0"
 }
 val ideaVersion: String by project
@@ -27,6 +27,7 @@ intellij {
         "2022.1" -> "gherkin:221.5080.126"
         "2022.2" -> "gherkin:222.3345.118"
         "2022.3" -> "gherkin:223.7571.113"
+        "2023.1" -> "gherkin:231.8109.91"
         "201.8743.12" -> "gherkin:202.6397.21"
         else -> ""
     }
