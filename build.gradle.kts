@@ -29,6 +29,7 @@ intellij {
         "2022.3" -> "gherkin:223.7571.113"
         "2023.1" -> "gherkin:231.8109.91"
         "2023.2" -> "gherkin:232.8660.88"
+        "2023.3" -> "gherkin:233.11799.165"
         "201.8743.12" -> "gherkin:202.6397.21"
         else -> ""
     }
@@ -43,6 +44,7 @@ intellij {
         "2022.3" -> "org.jetbrains.plugins.yaml:223.7571.59"
         "2023.1" -> "org.jetbrains.plugins.yaml:231.8109.126"
         "2023.2" -> "org.jetbrains.plugins.yaml:232.8660.88"
+        "2023.3" -> "org.jetbrains.plugins.yaml:233.11799.165"
         else -> ""
     }
 
