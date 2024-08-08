@@ -15,7 +15,7 @@ class YamlStepDefinition(private val method: YAMLSequenceItem) : AbstractStepDef
 
     override fun getVariableNames() = emptyList<String>()
 
-    override fun getCucumberRegexFromElement(element: PsiElement?): String? {
+    override fun getCucumberRegexFromElement(element: PsiElement?): String {
         return CucumberYamlUtil.getStepNameAsRegex(element as YAMLSequenceItem)
     }
 
@@ -23,7 +23,7 @@ class YamlStepDefinition(private val method: YAMLSequenceItem) : AbstractStepDef
         return CucumberYamlUtil.getStepName(element as YAMLSequenceItem)
     }
 
-    override fun getElement(): PsiElement? {
+    override fun getElement(): PsiElement {
         return YamlTestCasePsiElement(method)
     }
 
