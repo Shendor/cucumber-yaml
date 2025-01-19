@@ -6,7 +6,6 @@ import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import icons.CucumberIcons
-import org.jetbrains.kotlin.idea.base.util.module
 import org.shendor.cucumber.yaml.CucumberYamlUtil
 
 open class YamlReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase<PsiElement?>(element, textRange),

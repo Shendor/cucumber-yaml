@@ -15,20 +15,18 @@ class ParentYamlReferenceContributor : PsiReferenceContributor() {
                     element: PsiElement,
                     context: ProcessingContext
                 ): Array<PsiReference> {
-                    val value = getStepDefName(element)
-                    if (value != null && (element as YAMLKeyValue).value != null) {
-                        val property = TextRange(0, value.length)
-                        return arrayOf(YamlReference(element.value!!, property))
+                    if (element is YAMLKeyValue && element.value != null) {
+                        val value = element.valueText
+                        if (element.keyText == "parent") {
+                            return arrayOf(YamlReference(element.value!!, TextRange(0, value.length)))
+                        } else if (element.keyText == "element") {
+                            return arrayOf(JavaUiElementReference(element.value!!, TextRange(0, value.length)))
+                        }
                     }
+
                     return PsiReference.EMPTY_ARRAY
                 }
             })
-    }
-
-    private fun getStepDefName(element: PsiElement): String? {
-        return if (element is YAMLKeyValue) {
-            if (element.keyText == "parent") element.valueText else null
-        } else null
     }
 
 }

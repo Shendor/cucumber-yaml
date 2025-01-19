@@ -17,7 +17,8 @@
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileBasedIndex id="yaml" implementation="org.shendor.cucumber.yaml.YamlCucumberStepIndex"/>
+        <fileBasedIndex implementation="org.shendor.cucumber.yaml.YamlCucumberStepIndex"/>
+        <fileBasedIndex implementation="org.shendor.cucumber.yaml.YamlToUiElementIndex"/>
 
         <pom.declarationSearcher id="yaml" implementation="org.shendor.cucumber.yaml.search.StepDeclarationSearcher"/>
 
