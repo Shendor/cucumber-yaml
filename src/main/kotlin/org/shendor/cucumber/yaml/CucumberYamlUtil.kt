@@ -11,18 +11,21 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.indexing.FileBasedIndex
 import org.jetbrains.yaml.YAMLFileType
 import org.jetbrains.yaml.psi.YAMLKeyValue
+import org.jetbrains.yaml.psi.YAMLScalar
 import org.jetbrains.yaml.psi.YAMLSequenceItem
 import org.shendor.cucumber.yaml.steps.YamlStepDefinition
 import java.util.regex.Pattern
 
 const val TEST_STEP_SPECIAL_CHARS_REGEX = "[\\.:>]?"
 
+private const val UI_LOCATOR_ANNOTATION_NAME = "Locator"
+
 object CucumberYamlUtil {
     const val CUCUMBER_PACKAGE = "io.cucumber.java8"
     private val PARAM_REPLACEMENT_PATTERN: Pattern = Pattern.compile("<[^>]+>")
 
     fun isStepDefinition(candidate: YAMLKeyValue): Boolean {
-        return candidate.keyText == "test"
+        return candidate.keyText == "test" && candidate.value is YAMLScalar
     }
 
     fun matches(testStep: YAMLKeyValue, text: String): Boolean {
@@ -93,7 +96,7 @@ object CucumberYamlUtil {
                     PsiTreeUtil.getChildrenOfType(psiClass, PsiField::class.java)?.forEach { method ->
                         PsiTreeUtil.getChildrenOfType(method, PsiModifierList::class.java)?.let { modifiers ->
                             PsiTreeUtil.getChildrenOfType(modifiers[0], PsiAnnotation::class.java)?.forEach {
-                                if (it.nameReferenceElement?.text == "Location") {
+                                if (it.nameReferenceElement?.text == UI_LOCATOR_ANNOTATION_NAME) {
                                     elements.add(it)
                                 }
                             }
