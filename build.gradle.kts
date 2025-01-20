@@ -7,7 +7,7 @@ repositories {
 
 plugins {
     java
-    kotlin("jvm") version "2.0.0"
+    kotlin("jvm") version "2.0.20"
     id("org.jetbrains.intellij") version "1.17.3"
 }
 val ideaVersion: String by project
@@ -21,10 +21,10 @@ intellij {
     plugins.set(
         listOf(
             "com.intellij.java",
-            "org.jetbrains.plugins.yaml:241.17011.41",
+            "org.jetbrains.plugins.yaml:242.20224.237",
 //            "com.intellij.properties:223.7571.117",
-            "Kotlin",
-            "gherkin:241.17011.40"
+//            "Kotlin",
+            "gherkin:242.20224.159"
         )
     )
 }
@@ -51,6 +51,8 @@ tasks {
         commandLine = listOf("git", "push", "origin", version.toString())
     }
     patchPluginXml {
+        sinceBuild.set("242")
+        untilBuild.set("")
         pluginDescription.set(
             """
               <p>
@@ -72,6 +74,7 @@ tasks {
             """
       <ul>
         <li><b>1.0.0</b> <em>(2023-01-04)</em> - Initial release</li>
+        <li><b>1.0.0</b> <em>(2025-20-01)</em> - New YML-Cucumber and UI Elements references</li>
       </ul>
     """
         )
