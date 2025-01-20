@@ -8,6 +8,7 @@ import com.intellij.psi.PsiReference
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.util.Processor
 import org.jetbrains.plugins.cucumber.CucumberUtil
+import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLSequenceItem
 import org.shendor.cucumber.yaml.CucumberYamlUtil
 
@@ -25,7 +26,7 @@ class StepDefinitionUsageSearcher : QueryExecutorBase<PsiReference, ReferencesSe
             }
         }
 
-        if (element is YAMLSequenceItem) {
+        if (element is YAMLKeyValue) {
             inReadAction {
                 CucumberUtil.findGherkinReferencesToElement(
                     element,

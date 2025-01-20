@@ -7,14 +7,15 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.util.Consumer
+import org.jetbrains.yaml.psi.YAMLKeyValue
+import org.jetbrains.yaml.psi.YAMLScalar
 import org.shendor.cucumber.yaml.CucumberYamlUtil
-import org.jetbrains.yaml.psi.YAMLSequenceItem
 
 class StepDeclarationSearcher : PomDeclarationSearcher() {
     override fun findDeclarationsAt(element: PsiElement, offsetInElement: Int, consumer: Consumer<in PomTarget>) {
         ProgressManager.checkCanceled()
-        if (element is YAMLSequenceItem) {
-            val stepDeclaration = findStepDeclaration(element)
+        if (element is YAMLScalar && (element.parent as? YAMLKeyValue)?.keyText == "test") {
+            val stepDeclaration = findStepDeclaration(element.parent as YAMLKeyValue)
 
             stepDeclaration?.let {
                 consumer.consume(it)
@@ -22,8 +23,8 @@ class StepDeclarationSearcher : PomDeclarationSearcher() {
         }
     }
 
-    private fun findStepDeclaration(element: YAMLSequenceItem): YamlStepDeclaration? {
-        val stepName = CucumberYamlUtil.getStepName(element) ?: return null
+    private fun findStepDeclaration(element: YAMLKeyValue): YamlStepDeclaration? {
+        val stepName = CucumberYamlUtil.getStepName(element)
         return getStepDeclaration(element, stepName)
     }
 

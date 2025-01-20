@@ -17,6 +17,7 @@ import org.jetbrains.plugins.cucumber.psi.GherkinStep
 import org.jetbrains.plugins.cucumber.psi.GherkinStepsHolder
 import org.jetbrains.plugins.cucumber.steps.reference.CucumberStepReference
 import org.jetbrains.plugins.cucumber.steps.search.CucumberStepSearchUtil
+import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.shendor.cucumber.yaml.CucumberYamlUtil
 import org.jetbrains.yaml.psi.YAMLSequenceItem
 
@@ -27,7 +28,7 @@ class CucumberToYamlLineMarkerProvider : LineMarkerProvider {
         result: MutableCollection<in LineMarkerInfo<*>>
     ) {
         elements
-            .filterIsInstance<YAMLSequenceItem>()
+            .filterIsInstance<YAMLKeyValue>()
             .forEach { token ->
 
                 // Check context

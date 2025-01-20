@@ -14,11 +14,13 @@ import com.intellij.psi.search.SearchScope
 import org.shendor.cucumber.yaml.CucumberYamlUtil
 import org.shendor.cucumber.yaml.search.YamlStepDeclaration
 import org.jetbrains.yaml.psi.YAMLKeyValue
+import org.jetbrains.yaml.psi.YAMLMapping
 import org.jetbrains.yaml.psi.YAMLSequenceItem
 import org.jetbrains.yaml.psi.YAMLValue
+import org.jetbrains.yaml.psi.impl.YAMLKeyValueImpl
 import javax.swing.Icon
 
-class YamlTestCasePsiElement(private val item: YAMLSequenceItem) : YAMLSequenceItem {
+class YamlTestCasePsiElement(private val item: YAMLKeyValue) : YAMLKeyValue {
     override fun <T : Any?> getUserData(key: Key<T>): T? {
         return item.getUserData(key)
     }
@@ -28,7 +30,7 @@ class YamlTestCasePsiElement(private val item: YAMLSequenceItem) : YAMLSequenceI
     }
 
     override fun getIcon(flags: Int): Icon {
-        return item.getIcon(flags)
+        return item.getIcon(flags) ?: YAMLKeyValueImpl.YAML_KEY_ICON
     }
 
     override fun getProject(): Project {
@@ -256,16 +258,32 @@ class YamlTestCasePsiElement(private val item: YAMLSequenceItem) : YAMLSequenceI
         return item.presentation
     }
 
+    override fun setName(name: String): PsiElement {
+        return item.setName(name)
+    }
+
+    override fun getKey(): PsiElement? {
+       return item.key
+    }
+
+    override fun getKeyText(): String {
+        return item.keyText
+    }
+
     override fun getValue(): YAMLValue? {
         return item.value
     }
 
-    override fun getKeysValues(): MutableCollection<YAMLKeyValue> {
-        return item.keysValues
+    override fun getValueText(): String {
+       return item.valueText
     }
 
-    override fun getItemIndex(): Int {
-        return item.itemIndex
+    override fun getParentMapping(): YAMLMapping? {
+        return item.parentMapping
+    }
+
+    override fun setValue(p0: YAMLValue) {
+        return item.setValue(p0)
     }
 
     override fun equals(other: Any?): Boolean {

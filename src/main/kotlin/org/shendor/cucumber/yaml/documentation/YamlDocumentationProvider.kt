@@ -11,6 +11,7 @@ import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLSequenceItem
 import org.jetbrains.yaml.psi.YAMLValue
 import org.shendor.cucumber.yaml.CucumberYamlUtil
+import java.util.*
 
 class YamlDocumentationProvider : AbstractDocumentationProvider() {
 
@@ -35,7 +36,7 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
      * references pages online, URLs for the element can be returned here.
      */
     override fun getUrlFor(element: PsiElement, originalElement: PsiElement): List<String>? {
-        return null
+        return Collections.emptyList()
     }
 
     /**
@@ -46,8 +47,7 @@ class YamlDocumentationProvider : AbstractDocumentationProvider() {
         var key: String? = null
 
         if (element is YAMLKeyValue) {
-            val isTestStep = PsiTreeUtil.getTopmostParentOfType(element, YAMLSequenceItem::class.java)
-                ?.let { CucumberYamlUtil.isStepDefinition(it) } ?: false
+            val isTestStep = CucumberYamlUtil.isStepDefinition(element)
             if (isTestStep) {
                 key = nameToFile[element.keyText] ?: element.keyText
             }
