@@ -40,6 +40,7 @@ class YamlPropertyReferenceContributor : PsiReferenceContributor() {
                         val end = contentOffset + range.last + 1
                         
                         references.add(YamlPropertyReference(element, TextRange(start, end)))
+                        references.add(YamlToYamlPropertyReference(element, TextRange(start, end)))
                     }
                     
                     return references.toTypedArray()
