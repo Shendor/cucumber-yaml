@@ -1,9 +1,12 @@
 package org.shendor.cucumber.yaml.reference
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.navigation.ItemPresentation
+import com.intellij.navigation.NavigationItem
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
+import com.intellij.psi.impl.FakePsiElement
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.yaml.YAMLFileType
@@ -11,6 +14,7 @@ import org.jetbrains.yaml.psi.YAMLDocument
 import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLMapping
+import javax.swing.Icon
 
 class YamlToYamlPropertyReference(element: PsiElement, textRange: TextRange) :
     PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
@@ -28,7 +32,7 @@ class YamlToYamlPropertyReference(element: PsiElement, textRange: TextRange) :
             val yamlFile = psiManager.findFile(virtualFile) as? YAMLFile ?: continue
             val foundElement = findYamlElement(yamlFile, propertyKey)
             if (foundElement != null) {
-                results.add(PsiElementResolveResult(foundElement))
+                results.add(PsiElementResolveResult(YamlPropertyPsiElement(foundElement, propertyKey)))
             }
         }
         
@@ -37,7 +41,11 @@ class YamlToYamlPropertyReference(element: PsiElement, textRange: TextRange) :
 
     override fun resolve(): PsiElement? {
         val resolveResults = multiResolve(false)
-        return if (resolveResults.size == 1) resolveResults[0].element else null
+        if (resolveResults.size == 1) {
+            val element = resolveResults[0].element
+            return if (element is YamlPropertyPsiElement) element.delegate else element
+        }
+        return null
     }
 
     override fun getVariants(): Array<Any> {
@@ -106,4 +114,25 @@ class YamlToYamlPropertyReference(element: PsiElement, textRange: TextRange) :
             }
         }
     }
+}
+
+private class YamlPropertyPsiElement(val delegate: PsiElement, val fullPath: String) : FakePsiElement(), NavigationItem {
+    override fun getParent(): PsiElement = delegate.parent
+    override fun getNavigationElement(): PsiElement = delegate
+    override fun getIcon(open: Boolean): Icon? = delegate.getIcon(0)
+    override fun getName(): String = fullPath
+    override fun getPresentableText(): String = fullPath
+    override fun getPresentation(): ItemPresentation = object : ItemPresentation {
+        override fun getPresentableText(): String = fullPath
+        override fun getLocationString(): String = delegate.containingFile.name
+        override fun getIcon(unused: Boolean): Icon? = delegate.getIcon(0)
+    }
+    override fun isValid(): Boolean = delegate.isValid
+
+    override fun navigate(requestFocus: Boolean) {
+        (delegate as? NavigationItem)?.navigate(requestFocus)
+    }
+
+    override fun canNavigate(): Boolean = (delegate as? NavigationItem)?.canNavigate() ?: false
+    override fun canNavigateToSource(): Boolean = (delegate as? NavigationItem)?.canNavigateToSource() ?: false
 }
