@@ -1,6 +1,6 @@
 <idea-plugin>
-    <id>org.cucumber-yaml</id>
-    <name>Cucumber for Yaml</name>
+    <id>org.chronos</id>
+    <name>Chronos</name>
 
     <vendor>
         MA
@@ -13,42 +13,42 @@
     <depends>gherkin</depends>
 
     <extensions defaultExtensionNs="org.jetbrains.plugins.cucumber.steps">
-        <cucumberJvmExtensionPoint id="yaml" implementation="org.shendor.cucumber.yaml.YamlCucumberExtension"/>
+        <cucumberJvmExtensionPoint id="yaml" implementation="org.chronos.intellij.YamlCucumberExtension"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileBasedIndex implementation="org.shendor.cucumber.yaml.YamlCucumberStepIndex"/>
-        <fileBasedIndex implementation="org.shendor.cucumber.yaml.YamlToUiElementIndex"/>
+        <fileBasedIndex implementation="org.chronos.intellij.YamlCucumberStepIndex"/>
+        <fileBasedIndex implementation="org.chronos.intellij.YamlToUiElementIndex"/>
 
-        <pom.declarationSearcher id="yaml" implementation="org.shendor.cucumber.yaml.search.StepDeclarationSearcher"/>
+        <pom.declarationSearcher id="yaml" implementation="org.chronos.intellij.search.StepDeclarationSearcher"/>
 
-        <referencesSearch id="yaml" implementation="org.shendor.cucumber.yaml.search.StepDefinitionUsageSearcher"/>
+        <referencesSearch id="yaml" implementation="org.chronos.intellij.search.StepDefinitionUsageSearcher"/>
 
-        <findUsagesHandlerFactory id="yaml" implementation="org.shendor.cucumber.yaml.search.StepFindUsagesHandlerFactory"/>
+        <findUsagesHandlerFactory id="yaml" implementation="org.chronos.intellij.search.StepFindUsagesHandlerFactory"/>
 
-        <usageTypeProvider id="yaml" implementation="org.shendor.cucumber.yaml.search.StepUsageTypeProvider"/>
+        <usageTypeProvider id="yaml" implementation="org.chronos.intellij.search.StepUsageTypeProvider"/>
 
         <codeInsight.lineMarkerProvider
-                implementationClass="org.shendor.cucumber.yaml.search.CucumberToYamlLineMarkerProvider"
+                implementationClass="org.chronos.intellij.search.CucumberToYamlLineMarkerProvider"
                 language="yaml"/>
 
         <psi.referenceContributor language="JAVA"
-                                  implementation="org.shendor.cucumber.yaml.reference.YamlReferenceContributor"/>
+                                  implementation="org.chronos.intellij.reference.YamlReferenceContributor"/>
 
         <psi.referenceContributor language="yaml"
-                                  implementation="org.shendor.cucumber.yaml.reference.ParentYamlReferenceContributor"/>
+                                  implementation="org.chronos.intellij.reference.ParentYamlReferenceContributor"/>
 
         <psi.referenceContributor language="yaml"
-                                  implementation="org.shendor.cucumber.yaml.reference.YamlPropertyReferenceContributor"/>
+                                  implementation="org.chronos.intellij.reference.YamlPropertyReferenceContributor"/>
 
         <psi.referenceContributor language="yaml"
-                                  implementation="org.shendor.cucumber.yaml.reference.YamlResourceFileReferenceContributor"/>
+                                  implementation="org.chronos.intellij.reference.YamlResourceFileReferenceContributor"/>
 
-        <lang.documentationProvider language="yaml" implementationClass="org.shendor.cucumber.yaml.documentation.YamlDocumentationProvider"/>
+        <lang.documentationProvider language="yaml" implementationClass="org.chronos.intellij.documentation.YamlDocumentationProvider"/>
 
-        <annotator language="JAVA" implementationClass="org.shendor.cucumber.yaml.annotator.YamlAnnotator"/>
+        <annotator language="JAVA" implementationClass="org.chronos.intellij.annotator.YamlAnnotator"/>
 
-        <completion.contributor language="yaml" implementationClass="org.shendor.cucumber.yaml.completion.YamlCompletionContributor"/>
+        <completion.contributor language="yaml" implementationClass="org.chronos.intellij.completion.YamlCompletionContributor"/>
     </extensions>
 
 </idea-plugin>

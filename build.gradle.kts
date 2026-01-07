@@ -25,7 +25,7 @@ kotlin {
 
 intellijPlatform {
     pluginConfiguration {
-        name.set("cucumber-yaml")
+        name.set("Chronos")
     }
 
     pluginVerification {
@@ -57,7 +57,7 @@ tasks {
         pluginDescription.set(
             """
               <p>
-                This plugin enables <a href="https://cucumber.io/">Cucumber</a> support with step definitions written in Yaml.
+                This plugin enables <a href="https://cucumber.io/">Cucumber</a> support with step definitions written in Yaml (aka Chronos test definitions).
               </p>
               <p>
                 The following coding assistance features are available:
@@ -66,6 +66,8 @@ tasks {
                 <li>Navigation from Cucumber feature file to YAML.
                 <li>Navigation from Java step def to YAML.
                 <li>Navigation from YAML to Cucumber.
+                <li>References from property key to property declarations in .properties or .yaml files.
+                <li>References from ftl file path to a file.
                 <li>Documentation in tooltips.
                 <li>Keywords autocomplete.
               </ul>
@@ -76,6 +78,8 @@ tasks {
       <ul>
         <li><b>1.0.0</b> <em>(2023-01-04)</em> - Initial release</li>
         <li><b>1.0.0</b> <em>(2025-20-01)</em> - New YML-Cucumber and UI Elements references</li>
+        <li><b>1.1.0</b> <em>(2026-07-01)</em> - Added support of references from property key to property declarations in .properties or .yaml files.
+        Added support of references from ftl file path to file</li>
       </ul>
     """
         )
