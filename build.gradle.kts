@@ -1,57 +1,58 @@
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
 repositories {
     mavenCentral()
+    maven("https://packages.jetbrains.team/maven/p/kpm/public/")
+    gradlePluginPortal()
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 
 plugins {
     java
-    kotlin("jvm") version "2.0.20"
-    id("org.jetbrains.intellij") version "1.17.3"
+    kotlin("jvm") version "2.2.0"
+    id("org.jetbrains.intellij.platform") version "2.10.5"
 }
-val ideaVersion: String by project
-val jetbrainsPublishToken: String by project
 
-val pluginVersion: String by project
-
-intellij {
-    pluginName.set("cucumber-yaml")
-    version.set(ideaVersion)
-    plugins.set(
-        listOf(
-            "com.intellij.java",
-            "org.jetbrains.plugins.yaml:242.20224.237",
-//            "com.intellij.properties:223.7571.117",
-//            "Kotlin",
-            "gherkin:242.20224.159"
-        )
-    )
-}
+apply(plugin = "org.jetbrains.intellij.platform")
 
 kotlin {
     jvmToolchain(17)
 }
 
+intellijPlatform {
+    pluginConfiguration {
+        name.set("cucumber-yaml")
+    }
+
+    pluginVerification {
+        ides {
+            recommended()
+        }
+    }
+}
+
 dependencies {
     implementation("io.cucumber:cucumber-java:7.2.3")
+    implementation("org.jetbrains.intellij.platform:org.jetbrains.intellij.platform.gradle.plugin:2.10.5")
+
+    intellijPlatform {
+        create(
+            type = providers.gradleProperty("platformType"),
+            version = providers.gradleProperty("platformVersion")
+        )
+
+        bundledPlugins(providers.gradleProperty("platformBundledPlugins").map { it.split(',') })
+        plugins(providers.gradleProperty("platformPlugins").map { it.split(',') })
+    }
 }
 
 tasks {
-    register<Exec>("tag") {
-        commandLine = listOf("git", "tag", version.toString())
-    }
-    publishPlugin {
-        dependsOn("tag")
-//        token.set(jetbrainsPublishToken)
-        channels.set(listOf(version.toString().split('-').getOrElse(1) { "default" }.split('.').first()))
-    }
-    register<Exec>("publishTag") {
-        dependsOn(publishPlugin)
-        commandLine = listOf("git", "push", "origin", version.toString())
-    }
     patchPluginXml {
-        sinceBuild.set("242")
+        sinceBuild.set("251")
         untilBuild.set("")
         pluginDescription.set(
             """

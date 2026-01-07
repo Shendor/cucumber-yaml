@@ -1,13 +1,14 @@
 package org.shendor.cucumber.yaml.steps
 
+import com.intellij.openapi.application.edtWriteAction
+import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.roots.ModuleRootManager
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
-import com.intellij.psi.util.PsiTreeUtil
-import org.jetbrains.kotlin.idea.util.application.runWriteAction
-import org.jetbrains.kotlin.idea.util.sourceRoots
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.plugins.cucumber.AbstractStepDefinitionCreator
 import org.jetbrains.plugins.cucumber.psi.GherkinFile
 import org.jetbrains.plugins.cucumber.psi.GherkinStep
@@ -48,8 +49,10 @@ class YamlStepDefinitionCreator : AbstractStepDefinitionCreator() {
         val emptySequenceItem = yamlElementGenerator.createEmptySequenceItem()
         emptySequenceItem.add(yamlElementGenerator.createYamlKeyValue("test", step.name))
 
-        runWriteAction {
-            ymlFile.add(emptySequenceItem)
+        runBlocking {
+            edtWriteAction {
+                ymlFile.add(emptySequenceItem)
+            }
         }
 
         ymlFile.navigate(true)
@@ -72,9 +75,10 @@ class YamlStepDefinitionCreator : AbstractStepDefinitionCreator() {
 
         val stepDir = step.containingFile.containingDirectory
 
-        val sourceRoots = ModuleUtilCore.findModuleForPsiElement(step)?.sourceRoots ?: return stepDir
-        val root = sourceRoots.find { it.path.endsWith("resources") }
-        return PsiManager.getInstance(step.project).findDirectory(root!!) ?: return stepDir
+        val module = ModuleUtilCore.findModuleForPsiElement(step)
+        val sourceRoots = module?.let { ModuleRootManager.getInstance(it).sourceRoots }
+        val root = sourceRoots?.find { it.path.endsWith("resources") }
+        return root?.let { PsiManager.getInstance(step.project).findDirectory(root) } ?: return stepDir
     }
 }
 
