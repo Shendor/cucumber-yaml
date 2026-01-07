@@ -9,7 +9,7 @@
     <depends>com.intellij.java</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
     <depends>com.intellij.modules.lang</depends>
-<!--    <depends>com.intellij.properties</depends>-->
+    <depends>com.intellij.properties</depends>
     <depends>gherkin</depends>
 
     <extensions defaultExtensionNs="org.jetbrains.plugins.cucumber.steps">
@@ -37,6 +37,9 @@
 
         <psi.referenceContributor language="yaml"
                                   implementation="org.shendor.cucumber.yaml.reference.ParentYamlReferenceContributor"/>
+
+        <psi.referenceContributor language="yaml"
+                                  implementation="org.shendor.cucumber.yaml.reference.YamlPropertyReferenceContributor"/>
 
         <lang.documentationProvider language="yaml" implementationClass="org.shendor.cucumber.yaml.documentation.YamlDocumentationProvider"/>
 
