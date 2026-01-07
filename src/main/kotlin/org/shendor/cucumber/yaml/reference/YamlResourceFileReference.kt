@@ -66,7 +66,7 @@ class YamlResourceFileReference(element: PsiElement, textRange: TextRange) :
 
     override fun resolve(): PsiElement? {
         val resolveResults = multiResolve(false)
-        return if (resolveResults.isNotEmpty()) resolveResults[0].element else null
+        return if (resolveResults.size == 1) resolveResults[0].element else null
     }
 
     override fun getVariants(): Array<Any> {
