@@ -11,7 +11,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.chronos.intellij.CucumberYamlUtil
 import org.jetbrains.yaml.YAMLHighlighter
 
-class YamlAnnotator : Annotator {
+class JavaYamlAnnotator : Annotator {
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         if (element !is PsiLiteralExpression) {

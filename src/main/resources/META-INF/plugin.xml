@@ -46,7 +46,12 @@
 
         <lang.documentationProvider language="yaml" implementationClass="org.chronos.intellij.documentation.YamlDocumentationProvider"/>
 
-        <annotator language="JAVA" implementationClass="org.chronos.intellij.annotator.YamlAnnotator"/>
+        <annotator language="JAVA" implementationClass="org.chronos.intellij.annotator.JavaYamlAnnotator"/>
+        <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlFunctionAnnotator"/>
+        <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlNumberAnnotator"/>
+        <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlPropertyPlaceholderAnnotator"/>
+        <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlPropertyKeyAnnotator"/>
+        <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlStringAnnotator"/>
 
         <completion.contributor language="yaml" implementationClass="org.chronos.intellij.completion.YamlCompletionContributor"/>
     </extensions>
