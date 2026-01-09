@@ -51,6 +51,7 @@
         <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlNumberAnnotator"/>
         <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlPropertyPlaceholderAnnotator"/>
         <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlPropertyKeyAnnotator"/>
+        <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlParameterAnnotator"/>
         <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlStringAnnotator"/>
 
         <completion.contributor language="yaml" implementationClass="org.chronos.intellij.completion.YamlCompletionContributor"/>
