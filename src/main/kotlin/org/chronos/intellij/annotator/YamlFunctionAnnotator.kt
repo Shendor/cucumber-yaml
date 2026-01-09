@@ -9,38 +9,46 @@ import com.intellij.psi.PsiElement
 import org.jetbrains.yaml.psi.YAMLScalar
 
 class YamlFunctionAnnotator : Annotator {
-    private val regex = Regex("(#?[a-zA-Z_]\\w*\\().*?\\)")
+    private val funcStartRegex = Regex("#?[a-zA-Z_]\\w*\\(")
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         if (element !is YAMLScalar) return
 
-        val text = element.textValue
-        if (!text.contains("(")) return
-
         val elementText = element.text
-        // We need to find matches in elementText to get correct offsets, but textValue might be different (e.g. unquoted)
-        // However, the regex should work on the raw text too.
-        val matches = regex.findAll(elementText)
+        if (!elementText.contains("(")) return
 
-        for (match in matches) {
-            val funcNameGroup = match.groups[1] ?: continue
-            
-            // Highlight #func part
-            val funcStart = element.textRange.startOffset + funcNameGroup.range.first
-            val funcEnd = element.textRange.startOffset + funcNameGroup.range.last + 1
-            
+        val startOffset = element.textRange.startOffset
+        val funcStarts = funcStartRegex.findAll(elementText)
+
+        val closingBrackets = mutableListOf<Int>()
+        val openBracketsIndices = mutableListOf<Int>()
+
+        for (i in elementText.indices) {
+            if (elementText[i] == '(') {
+                openBracketsIndices.add(i)
+            } else if (elementText[i] == ')') {
+                if (openBracketsIndices.isNotEmpty()) {
+                    val openIdx = openBracketsIndices.removeAt(openBracketsIndices.size - 1)
+                    // Check if this '(' was part of a function start
+                    if (funcStarts.any { it.range.last == openIdx }) {
+                        closingBrackets.add(i)
+                    }
+                }
+            }
+        }
+
+        // Highlight function starts
+        for (match in funcStarts) {
             holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-                .range(TextRange(funcStart, funcEnd))
+                .range(TextRange(startOffset + match.range.first, startOffset + match.range.last + 1))
                 .textAttributes(DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
                 .create()
+        }
 
-            // Highlight the last closing bracket
-            val lastBracketIndex = match.range.last
-            val bracketStart = element.textRange.startOffset + lastBracketIndex
-            val bracketEnd = bracketStart + 1
-            
+        // Highlight matched closing brackets
+        for (bracketIdx in closingBrackets) {
             holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-                .range(TextRange(bracketStart, bracketEnd))
+                .range(TextRange(startOffset + bracketIdx, startOffset + bracketIdx + 1))
                 .textAttributes(DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
                 .create()
         }
