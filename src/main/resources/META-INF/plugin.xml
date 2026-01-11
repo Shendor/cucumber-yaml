@@ -44,7 +44,7 @@
         <psi.referenceContributor language="yaml"
                                   implementation="org.chronos.intellij.reference.YamlResourceFileReferenceContributor"/>
 
-        <lang.documentationProvider language="yaml" implementationClass="org.chronos.intellij.documentation.YamlDocumentationProvider"/>
+        <platform.backend.documentation.psiTargetProvider implementation="org.chronos.intellij.documentation.YamlDocumentationTargetProvider"/>
 
         <annotator language="JAVA" implementationClass="org.chronos.intellij.annotator.JavaYamlAnnotator"/>
         <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlFunctionAnnotator"/>
