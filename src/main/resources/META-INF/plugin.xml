@@ -46,6 +46,8 @@
 
         <platform.backend.documentation.psiTargetProvider implementation="org.chronos.intellij.documentation.YamlDocumentationTargetProvider"/>
 
+        <colorSettingsPage implementation="org.chronos.intellij.highlighting.YamlColorSettingsPage"/>
+
         <annotator language="JAVA" implementationClass="org.chronos.intellij.annotator.JavaYamlAnnotator"/>
         <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlFunctionAnnotator"/>
         <annotator language="yaml" implementationClass="org.chronos.intellij.annotator.YamlNumberAnnotator"/>

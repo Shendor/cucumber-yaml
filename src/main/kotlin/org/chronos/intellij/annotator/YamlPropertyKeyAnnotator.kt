@@ -5,19 +5,17 @@ import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.lang.properties.PropertiesFileType
 import com.intellij.lang.properties.psi.PropertiesFile
-import com.intellij.openapi.editor.markup.TextAttributes
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
+import org.chronos.intellij.highlighting.YamlColorSettingsPage
 import org.jetbrains.yaml.YAMLFileType
 import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLMapping
 import org.jetbrains.yaml.psi.YAMLScalar
-import java.awt.Font
-import com.intellij.openapi.editor.markup.EffectType
 
 class YamlPropertyKeyAnnotator : Annotator {
     private val regex = Regex("\\\$\\{([^}]+)}")
@@ -45,7 +43,7 @@ class YamlPropertyKeyAnnotator : Annotator {
             } else {
                 holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .range(range)
-                    .enforcedTextAttributes(TextAttributes(null, null, null, EffectType.LINE_UNDERSCORE, Font.ITALIC))
+                    .textAttributes(YamlColorSettingsPage.YAML_PROPERTY_KEY)
                     .create()
             }
         }

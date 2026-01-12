@@ -3,9 +3,9 @@ package org.chronos.intellij.annotator
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import org.chronos.intellij.highlighting.YamlColorSettingsPage
 import org.jetbrains.yaml.psi.YAMLScalar
 
 class YamlParameterAnnotator : Annotator {
@@ -23,7 +23,7 @@ class YamlParameterAnnotator : Annotator {
 
             holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                 .range(TextRange(start, end))
-                .textAttributes(DefaultLanguageHighlighterColors.KEYWORD)
+                .textAttributes(YamlColorSettingsPage.YAML_PARAMETER)
                 .create()
         }
     }
