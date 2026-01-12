@@ -70,6 +70,7 @@ tasks {
                 <li>References from ftl file path to a file.
                 <li>Documentation in tooltips.
                 <li>Keywords autocomplete.
+                <li>Customisable colour scheme for Chronos syntax.
               </ul>
         """
         )
@@ -80,6 +81,7 @@ tasks {
         <li><b>1.0.0</b> <em>(2025-20-01)</em> - New YML-Cucumber and UI Elements references</li>
         <li><b>1.1.0</b> <em>(2026-07-01)</em> - Added support of references from property key to property declarations in .properties or .yaml files.
         Added support of references from ftl file path to file</li>
+        <li><b>1.2.0</b> <em>(2026-12-01)</em> - Improved colour scheme and option to edit it</li>
       </ul>
     """
         )
