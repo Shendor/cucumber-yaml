@@ -22,6 +22,7 @@ private const val UI_LOCATOR_ANNOTATION_NAME = "Locator"
 
 object CucumberYamlUtil {
     const val CUCUMBER_PACKAGE = "io.cucumber.java8"
+    private val DEFAULT_VALUE_SEPARATOR = Regex(":")
     private val PARAM_REPLACEMENT_PATTERN: Pattern = Pattern.compile("<[^>]+>")
 
     fun isStepDefinition(candidate: YAMLKeyValue): Boolean {
@@ -109,5 +110,9 @@ object CucumberYamlUtil {
         }, project, null)
 
         return elements
+    }
+
+    fun extractToKeyAndDefaultValue(key: String): List<String> {
+        return DEFAULT_VALUE_SEPARATOR.split(key)
     }
 }

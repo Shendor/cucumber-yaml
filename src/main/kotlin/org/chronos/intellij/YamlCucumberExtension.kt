@@ -19,24 +19,24 @@ class YamlCucumberExtension : AbstractCucumberExtension() {
 
     override fun getStepDefinitionCreator(): StepDefinitionCreator = stepDefinitionCreator
 
-    override fun isStepLikeFile(child: PsiElement, parent: PsiElement) = child is YAMLFile
+    override fun isStepLikeFile(child: PsiElement) = child is YAMLFile
 
-    override fun isWritableStepLikeFile(child: PsiElement, parent: PsiElement): Boolean {
-        return isStepLikeFile(child, parent) && (child as YAMLFile).virtualFile.isWritable
+    override fun isWritableStepLikeFile(child: PsiElement): Boolean {
+        return isStepLikeFile(child) && (child as YAMLFile).virtualFile.isWritable
     }
 
     override fun getStepFileType() = BDDFrameworkType(YAMLFileType.YML)
 
     override fun getStepDefinitionContainers(featureFile: GherkinFile): MutableCollection<out PsiFile> {
         val module = ModuleUtilCore.findModuleForPsiElement(featureFile) ?: return hashSetOf()
-        val stepDefinitions = loadStepsFor(featureFile, module)
+        val stepDefinitions = loadStepsFor(module)
 
         val result = hashSetOf<PsiFile>()
         stepDefinitions.forEach { stepDefinition ->
             stepDefinition.element?.let { element ->
                 val psiFile = element.containingFile
                 val psiDirectory = psiFile.parent
-                if (psiDirectory != null && isWritableStepLikeFile(psiFile, psiDirectory)) {
+                if (psiDirectory != null && isWritableStepLikeFile(psiFile)) {
                     result.add(psiFile)
                 }
             }
@@ -45,7 +45,7 @@ class YamlCucumberExtension : AbstractCucumberExtension() {
         return result
     }
 
-    override fun loadStepsFor(featureFile: PsiFile?, module: Module): MutableList<AbstractStepDefinition> {
+    override fun loadStepsFor(module: Module): MutableList<AbstractStepDefinition> {
         /*val fileBasedIndex = FileBasedIndex.getInstance()
         val project = module.project
 

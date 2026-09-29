@@ -9,6 +9,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
+import org.chronos.intellij.CucumberYamlUtil.extractToKeyAndDefaultValue
 
 class YamlPropertyReference(element: PsiElement, textRange: TextRange) :
     PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
@@ -17,7 +18,7 @@ class YamlPropertyReference(element: PsiElement, textRange: TextRange) :
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
         val project = element.project
-        val properties = findProperties(project, propertyKey)
+        val properties = findProperties(project, extractToKeyAndDefaultValue(propertyKey)[0])
         return properties.map { PsiElementResolveResult(it.psiElement) }.toTypedArray()
     }
 
@@ -31,7 +32,8 @@ class YamlPropertyReference(element: PsiElement, textRange: TextRange) :
         val properties = findAllProperties(project)
         return properties.map { property ->
             val psiElement = property.psiElement
-            LookupElementBuilder.create(property.key ?: "")
+            val key = extractToKeyAndDefaultValue(property.key ?: "")[0]
+            LookupElementBuilder.create(key)
                 .withIcon(psiElement.getIcon(0))
                 .withTypeText(psiElement.containingFile.name)
         }.toTypedArray()

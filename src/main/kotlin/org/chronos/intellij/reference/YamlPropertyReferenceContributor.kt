@@ -6,6 +6,8 @@ import com.intellij.psi.*
 import com.intellij.util.ProcessingContext
 import org.jetbrains.yaml.psi.YAMLScalar
 
+const val PROPERTY_SYNTAX_REGEX = "\\\$\\{([^}]+)}"
+
 class YamlPropertyReferenceContributor : PsiReferenceContributor() {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(
@@ -20,7 +22,7 @@ class YamlPropertyReferenceContributor : PsiReferenceContributor() {
                     if (text.isEmpty()) return PsiReference.EMPTY_ARRAY
                     
                     val references = mutableListOf<PsiReference>()
-                    val regex = Regex("\\\$\\{([^}]+)}")
+                    val regex = Regex(PROPERTY_SYNTAX_REGEX)
                     val matches = regex.findAll(text)
                     
                     // We need the offset of the content within the element's text (e.g., skip quotes)

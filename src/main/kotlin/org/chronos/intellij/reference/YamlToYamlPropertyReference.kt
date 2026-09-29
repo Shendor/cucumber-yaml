@@ -8,6 +8,7 @@ import com.intellij.psi.*
 import com.intellij.psi.impl.FakePsiElement
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
+import org.chronos.intellij.CucumberYamlUtil.extractToKeyAndDefaultValue
 import org.jetbrains.yaml.YAMLFileType
 import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLMapping
@@ -27,9 +28,10 @@ class YamlToYamlPropertyReference(element: PsiElement, textRange: TextRange) :
         
         for (virtualFile in yamlFiles) {
             val yamlFile = psiManager.findFile(virtualFile) as? YAMLFile ?: continue
-            val foundElement = findYamlElement(yamlFile, propertyKey)
+            val key = extractToKeyAndDefaultValue(propertyKey)[0]
+            val foundElement = findYamlElement(yamlFile, key)
             if (foundElement != null) {
-                results.add(PsiElementResolveResult(YamlPropertyPsiElement(foundElement, propertyKey)))
+                results.add(PsiElementResolveResult(YamlPropertyPsiElement(foundElement, key)))
             }
         }
         

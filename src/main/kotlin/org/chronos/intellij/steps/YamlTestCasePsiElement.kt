@@ -282,6 +282,8 @@ class YamlTestCasePsiElement(private val item: YAMLKeyValue) : YAMLKeyValue {
         return item.parentMapping
     }
 
+    override fun isExplicitKey(): Boolean = item.isExplicitKey
+
     override fun setValue(p0: YAMLValue) {
         return item.setValue(p0)
     }
