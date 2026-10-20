@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 repositories {
@@ -50,10 +51,12 @@ intellijPlatform {
 }
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.opentest4j:opentest4j:1.3.0")
     implementation("io.cucumber:cucumber-java:7.2.3")
-    implementation("org.jetbrains.intellij.platform:org.jetbrains.intellij.platform.gradle.plugin:2.10.5")
 
     intellijPlatform {
+        testFramework(TestFrameworkType.Platform)
         create(
             type = providers.gradleProperty("platformType"),
             version = providers.gradleProperty("platformVersion")
@@ -65,6 +68,10 @@ dependencies {
 }
 
 tasks {
+    test {
+        systemProperty("idea.load.plugins.id", "org.chronos")
+    }
+
     patchPluginXml {
         sinceBuild.set("262")
         // untilBuild.set("")
