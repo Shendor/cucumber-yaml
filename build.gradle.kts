@@ -1,6 +1,5 @@
-import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URI
 
 repositories {
     mavenCentral()
@@ -13,14 +12,29 @@ repositories {
 
 plugins {
     java
-    kotlin("jvm") version "2.4.0"
+    kotlin("jvm") version "2.4.20"
     id("org.jetbrains.intellij.platform") version "2.18.1"
 }
 
 apply(plugin = "org.jetbrains.intellij.platform")
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(27)
+}
+
+// Build with JDK 27 while retaining compatibility with the IDE's bundled runtime.
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(17)
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    // The IntelliJ manifest task reads the target directly from compile tasks.
+    compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
 }
 
 intellijPlatform {
