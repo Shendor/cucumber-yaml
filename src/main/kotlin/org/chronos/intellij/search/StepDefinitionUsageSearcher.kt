@@ -18,7 +18,7 @@ class StepDefinitionUsageSearcher : QueryExecutorBase<PsiReference, ReferencesSe
             (target.target as? YamlStepDeclaration)?.element
         } else target
         if (element is YAMLKeyValue && CucumberYamlUtil.isStepDefinition(element)) {
-            ChronosStepUsages.process(element, queryParameters.effectiveSearchScope, consumer)
+            YamlStepUsages.process(element, queryParameters.effectiveSearchScope, consumer)
         }
     }
 }

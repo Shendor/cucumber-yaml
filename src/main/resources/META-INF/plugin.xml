@@ -17,7 +17,7 @@
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <iconProvider implementation="org.chronos.intellij.search.ChronosYamlIconProvider"/>
+        <iconProvider implementation="org.chronos.intellij.search.YamlIconProvider"/>
         <fileBasedIndex implementation="org.chronos.intellij.YamlCucumberStepIndex"/>
         <fileBasedIndex implementation="org.chronos.intellij.YamlToUiElementIndex"/>
 
