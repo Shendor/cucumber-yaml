@@ -1,77 +1,40 @@
 package org.chronos.intellij.reference
 
-import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
-import com.intellij.psi.util.PsiTreeUtil
-import icons.CucumberIcons
 import org.chronos.intellij.CucumberYamlUtil
+import org.jetbrains.yaml.psi.YAMLKeyValue
 
-open class JavaUiElementReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase<PsiElement?>(element, textRange),
-    PsiPolyVariantReference {
-    protected var uiElementName: String
+class JavaUiElementReference(element: PsiElement, textRange: TextRange) :
+    PsiPolyVariantReferenceBase<PsiElement>(element, textRange) {
+    private val uiElementName = (element as? YAMLKeyValue)?.valueText
+        ?: textRange.substring(element.text)
 
-    init {
-        uiElementName = element.text.substring(textRange.startOffset, textRange.endOffset)
+    override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> =
+        findElements().filter { getLocationName(it) == uiElementName }
+            .map { PsiElementResolveResult(it) }.toTypedArray()
+
+    override fun isReferenceTo(target: PsiElement): Boolean = multiResolve(false).any {
+        val annotation = it.element as? PsiAnnotation ?: return@any false
+        val field = (annotation.parent as? PsiModifierList)?.parent
+        element.manager.areElementsEquivalent(annotation, target) ||
+            (field != null && element.manager.areElementsEquivalent(field, target))
     }
 
-    override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
-        val module = ModuleUtilCore.findModuleForPsiElement(element)
-        return module?.let {
-            val uiElements = CucumberYamlUtil.findJavaUiElements(it)
-            val results: MutableList<ResolveResult> = ArrayList()
-            for (item in uiElements) {
-                if (getLocationName(item) == uiElementName)
-                    results.add(PsiElementResolveResult(item))
-            }
-            results.toTypedArray()
-        } ?: emptyArray()
-    }
-
-    override fun resolve(): PsiElement? {
-        val resolveResults = multiResolve(false)
-        return if (resolveResults.size == 1) resolveResults[0].element else null
-    }
-
-    override fun getVariants(): Array<Any> {
-        val variants = mutableListOf<LookupElement>()
-        if (myElement != null) {
-            val module = ModuleUtilCore.findModuleForPsiElement(myElement!!)
-            module?.let {
-                val uiElements = CucumberYamlUtil.findJavaUiElements(module)
-                for (item in uiElements) {
-                    if (getLocationName(item) == uiElementName) {
-                        variants.add(
-                            LookupElementBuilder
-                                .create(item.text).withIcon(CucumberIcons.Cucumber)
-                                .withTypeText(item.containingFile.name)
-                        )
-                    }
-                }
-            }
+    override fun getVariants(): Array<Any> = findElements().mapNotNull { annotation ->
+        getLocationName(annotation)?.let { name ->
+            LookupElementBuilder.create(annotation, name).withTypeText(annotation.containingFile.name)
         }
-        return variants.toTypedArray()
-    }
+    }.toTypedArray()
 
-    private fun getLocationName(element: PsiElement): String {
-        return when (element) {
-            is PsiLiteralExpression -> element.value?.toString() ?: ""
-            is PsiAnnotation -> {
-                PsiTreeUtil.getChildrenOfType(element, PsiAnnotationParameterList::class.java)?.first()?.let { paramList ->
-                    PsiTreeUtil.getChildrenOfType(paramList, PsiNameValuePair::class.java)
-                        ?.find { pair -> pair.text.startsWith("name") || pair.children.isNotEmpty() }
-                        ?.let {
-                            extractTextFromJavaString(PsiTreeUtil.getChildrenOfType(it, PsiLiteralExpression::class.java)?.first())
-                        } ?: ""
-                } ?: ""
-            }
-            else -> ""
-        }
-    }
+    private fun findElements(): List<PsiAnnotation> =
+        ModuleUtilCore.findModuleForPsiElement(element)?.let(CucumberYamlUtil::findJavaUiElements) ?: emptyList()
 
-    private fun extractTextFromJavaString(element: PsiLiteralExpression?): String {
-        return if (element?.text?.startsWith("\"") == true) element.text.substring(1, element.text.length - 1) else element?.text ?: ""
+    private fun getLocationName(annotation: PsiAnnotation): String? {
+        val value = annotation.findAttributeValue("name") ?: return null
+        return JavaPsiFacade.getInstance(element.project).constantEvaluationHelper
+            .computeConstantExpression(value) as? String
     }
 }

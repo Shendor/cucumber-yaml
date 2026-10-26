@@ -1,12 +1,11 @@
 package org.chronos.intellij
 
-import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.progress.ProgressManager
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.*
-import com.intellij.psi.impl.source.PsiClassImpl
 import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.search.PsiShortNamesCache
+import com.intellij.psi.search.searches.AnnotatedElementsSearch
 import com.intellij.psi.search.ProjectScope
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.indexing.FileBasedIndex
@@ -79,37 +78,15 @@ object CucumberYamlUtil {
     }
 
     fun findJavaUiElements(module: Module): List<PsiAnnotation> {
-        val fileBasedIndex = FileBasedIndex.getInstance()
-        val project = module.project
-
-        val searchScope = module.getModuleWithDependenciesAndLibrariesScope(true)
-        val files = GlobalSearchScope.getScopeRestrictedByFileTypes(searchScope, JavaFileType.INSTANCE)
-
-        val elements = mutableListOf<PsiAnnotation>()
-        val psiManager = PsiManager.getInstance(project)
-
-        // Iterate through VirtualFiles in the scope
-        fileBasedIndex.iterateIndexableFiles({ virtualFile: VirtualFile ->
-            if (!virtualFile.isDirectory && files.contains(virtualFile)) {
-                val psiFile = psiManager.findFile(virtualFile)
-                if (psiFile != null && psiFile is PsiJavaFile) {
-                    val psiClass = PsiTreeUtil.getChildrenOfType(psiFile, PsiClassImpl::class.java)!![0]
-                    PsiTreeUtil.getChildrenOfType(psiClass, PsiField::class.java)?.forEach { method ->
-                        PsiTreeUtil.getChildrenOfType(method, PsiModifierList::class.java)?.let { modifiers ->
-                            PsiTreeUtil.getChildrenOfType(modifiers[0], PsiAnnotation::class.java)?.forEach {
-                                if (it.nameReferenceElement?.text == UI_LOCATOR_ANNOTATION_NAME) {
-                                    elements.add(it)
-                                }
-                            }
-                        }
-                    }
-
+        val scope = module.getModuleWithDependenciesAndLibrariesScope(true)
+        return PsiShortNamesCache.getInstance(module.project).getClassesByName(UI_LOCATOR_ANNOTATION_NAME, scope)
+            .filter { it.isAnnotationType }
+            .flatMap { annotationClass ->
+                val qualifiedName = annotationClass.qualifiedName ?: return@flatMap emptyList()
+                AnnotatedElementsSearch.searchPsiFields(annotationClass, scope).findAll().mapNotNull { field ->
+                    field.modifierList?.findAnnotation(qualifiedName)
                 }
-            }
-            true // continue processing
-        }, project, null)
-
-        return elements
+            }.distinct()
     }
 
     fun extractToKeyAndDefaultValue(key: String): List<String> {

@@ -17,12 +17,18 @@
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
+        <iconProvider implementation="org.chronos.intellij.search.ChronosYamlIconProvider"/>
         <fileBasedIndex implementation="org.chronos.intellij.YamlCucumberStepIndex"/>
         <fileBasedIndex implementation="org.chronos.intellij.YamlToUiElementIndex"/>
 
         <pom.declarationSearcher id="yaml" implementation="org.chronos.intellij.search.StepDeclarationSearcher"/>
 
         <referencesSearch id="yaml" implementation="org.chronos.intellij.search.StepDefinitionUsageSearcher"/>
+        <referencesSearch implementation="org.chronos.intellij.search.JavaUiUsageSearcher"/>
+        <useScopeEnlarger implementation="org.chronos.intellij.search.JavaUiUseScopeEnlarger"/>
+
+        <codeInsight.lineMarkerProvider language="JAVA"
+                implementationClass="org.chronos.intellij.search.JavaUiUsageLineMarkerProvider"/>
 
         <findUsagesHandlerFactory id="yaml" implementation="org.chronos.intellij.search.StepFindUsagesHandlerFactory"/>
 
