@@ -1,9 +1,7 @@
 package org.chronos.intellij.reference
 
-import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
 
 class YamlReferenceContributor : PsiReferenceContributor() {
@@ -17,7 +15,7 @@ class YamlReferenceContributor : PsiReferenceContributor() {
                 ): Array<PsiReference> {
                     val value = getStepDefName(element)
                     if (value != null) {
-                        val property = TextRange(1, value.length + 1)
+                        val property = ElementManipulators.getValueTextRange(element)
                         return arrayOf(YamlReference(element, property))
                     }
                     return PsiReference.EMPTY_ARRAY
@@ -27,10 +25,11 @@ class YamlReferenceContributor : PsiReferenceContributor() {
 
     private fun getStepDefName(element: PsiElement): String? {
         val literalExpression = element as PsiLiteralExpression
-        return PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression::class.java)?.let {
-            if (it.text.startsWith("runTestCase") && literalExpression.value is String)
-                literalExpression.value as String? else null
-        }
+        val arguments = literalExpression.parent as? PsiExpressionList ?: return null
+        val call = arguments.parent as? PsiMethodCallExpression ?: return null
+        return if (call.methodExpression.referenceName == "runTestCase" &&
+            arguments.expressions.firstOrNull() == literalExpression
+        ) literalExpression.value as? String else null
     }
 
 }

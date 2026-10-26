@@ -13,7 +13,8 @@ open class YamlReference(element: PsiElement, textRange: TextRange) : PsiReferen
     protected var testName: String
 
     init {
-        testName = element.text.substring(textRange.startOffset, textRange.endOffset)
+        testName = (element as? PsiLiteralExpression)?.value as? String
+            ?: element.text.substring(textRange.startOffset, textRange.endOffset)
     }
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {

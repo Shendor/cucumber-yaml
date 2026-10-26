@@ -17,9 +17,7 @@ import org.chronos.intellij.CucumberYamlUtil
 import org.jetbrains.plugins.cucumber.psi.GherkinStep
 import org.jetbrains.plugins.cucumber.psi.GherkinStepsHolder
 import org.jetbrains.plugins.cucumber.steps.reference.CucumberStepReference
-import org.jetbrains.plugins.cucumber.steps.search.CucumberStepSearchUtil
 import org.jetbrains.yaml.psi.YAMLKeyValue
-import kotlin.collections.get
 
 class CucumberToYamlLineMarkerProvider : LineMarkerProvider {
 
@@ -41,7 +39,7 @@ class CucumberToYamlLineMarkerProvider : LineMarkerProvider {
                     DumbService.getInstance(token.project).runReadActionInSmartMode {
                         val usages = findStepUsages(token)
                         if (usages.isNotEmpty())
-                            buildMarkers(token, usages, CucumberYamlUtil.getStepNameAsRegex(token), result)
+                            buildMarkers(token, usages, result)
                     }
                 }
             }
@@ -50,61 +48,45 @@ class CucumberToYamlLineMarkerProvider : LineMarkerProvider {
     protected fun buildMarkers(
         token: PsiElement,
         usages: List<PsiReference>,
-        annotationText: String?,
         result: MutableCollection<in LineMarkerInfo<*>>
     ) {
-        // Group usages by regex
-        val groupedByRegex: Map<String, List<GherkinStep>> = usages.map { it.element }
-            .filterIsInstance<GherkinStep>()
-            .flatMap { step ->
-                step.findDefinitions()
-                    .toSet()
-                    .mapNotNull { it.expression }
-                    .map { it to step }
-            }
-            .groupBy { it.first }
-            .map { it.key to it.value.map { it.second }.toList() }
-            .toMap()
-
-        // Find annotation usages
-        val steps = groupedByRegex[annotationText]
-            ?: return
-
-        // Add marker
-        result.add(
-            buildMarker(
-                element = token,
-                targets = steps.map { it.stepHolder })
-        )
+        val targets = usages.map { reference ->
+            val usage = reference.element
+            if (usage is GherkinStep) usage.stepHolder else usage
+        }.distinct()
+        if (targets.isNotEmpty()) result.add(buildMarker(token, targets))
     }
 
     protected fun buildMarker(
         element: PsiElement,
-        targets: List<GherkinStepsHolder>
+        targets: List<PsiElement>
     ): RelatedItemLineMarkerInfo<PsiElement> {
         val toSet = targets.toSet()
         val usagesCount = toSet.size
-        val usagesText = if (usagesCount == 1) "Used by 1 scenario" else "Used by $usagesCount scenarios"
+        val onlyScenarios = toSet.all { it is GherkinStepsHolder }
+        val noun = if (onlyScenarios) "scenario" else "usage"
+        val usagesText = "Used by $usagesCount $noun" + if (usagesCount == 1) "" else "s"
 
         val builder = NavigationGutterIconBuilder
             .create(getNumberIcon(usagesCount, JBColor.foreground()))
             .setTargets(toSet)
             .setAlignment(GutterIconRenderer.Alignment.RIGHT)
             .setTooltipText(usagesText)
-            .setPopupTitle("Cucumber")
+            .setPopupTitle("Test case usages")
 
         return builder.createLineMarkerInfo(element)
     }
 
     fun findStepUsages(element: PsiElement): List<PsiReference> {
 
-        val scope = CucumberStepSearchUtil.restrictScopeToGherkinFiles(GlobalSearchScope.projectScope(element.project))
+        val scope = GlobalSearchScope.projectScope(element.project)
         val search = ReferencesSearch.search(element, scope, false)
 
         val references = mutableListOf<PsiReference>()
         search.forEach(Processor { ref: PsiReference ->
             val elt = ref.element
-            if (elt is GherkinStep && ref is CucumberStepReference)
+            if ((elt is GherkinStep && ref is CucumberStepReference) ||
+                ref is org.chronos.intellij.reference.YamlReference)
                 references.add(ref)
             true
         })

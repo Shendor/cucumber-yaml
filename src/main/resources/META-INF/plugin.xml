@@ -44,6 +44,9 @@
         <psi.referenceContributor language="yaml"
                                   implementation="org.chronos.intellij.reference.YamlResourceFileReferenceContributor"/>
 
+        <psi.referenceContributor language="yaml"
+                                  implementation="org.chronos.intellij.reference.YamlFunctionReferenceContributor"/>
+
         <platform.backend.documentation.psiTargetProvider implementation="org.chronos.intellij.documentation.YamlDocumentationTargetProvider"/>
 
         <colorSettingsPage implementation="org.chronos.intellij.highlighting.YamlColorSettingsPage"/>

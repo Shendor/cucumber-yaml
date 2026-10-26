@@ -1,5 +1,12 @@
 package org.chronos.intellij.search
 
+import com.intellij.ide.highlighter.JavaFileType
+import com.intellij.openapi.progress.ProgressManager
+import com.intellij.psi.PsiLiteralExpression
+import com.intellij.psi.PsiManager
+import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.search.PsiSearchScopeUtil
+import org.chronos.intellij.reference.YamlReference
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.pom.PomTargetPsiElement
@@ -28,7 +35,7 @@ class StepDefinitionUsageSearcher : QueryExecutorBase<PsiReference, ReferencesSe
             }
         }
 
-        if (element is YAMLKeyValue) {
+        if (element is YAMLKeyValue && CucumberYamlUtil.isStepDefinition(element)) {
             val stepName = CucumberYamlUtil.getStepName(element)
             val regex = CucumberYamlUtil.getStepNameAsRegex(element)
 
@@ -53,6 +60,18 @@ class StepDefinitionUsageSearcher : QueryExecutorBase<PsiReference, ReferencesSe
                     
                     // Actually, if we just want to find usages of the string in YAML files:
                     val searchScope = if (scope is GlobalSearchScope) scope else GlobalSearchScope.allScope(project)
+                    // Resolve Java calls so parameterized test names use the same matching as navigation.
+                    for (file in FileTypeIndex.getFiles(JavaFileType.INSTANCE, searchScope)) {
+                        ProgressManager.checkCanceled()
+                        val psiFile = PsiManager.getInstance(project).findFile(file) ?: continue
+                        for (literal in PsiTreeUtil.findChildrenOfType(psiFile, PsiLiteralExpression::class.java)) {
+                            if (!PsiSearchScopeUtil.isInScope(scope, literal)) continue
+                            for (reference in literal.references.filterIsInstance<YamlReference>()) {
+                                if (reference.isReferenceTo(element) && !consumer.process(reference)) return@inReadAction
+                            }
+                        }
+                    }
+
                     val yamlFiles = FileTypeIndex.getFiles(YAMLFileType.YML, searchScope)
                     for (file in yamlFiles) {
                         val psiFile = com.intellij.psi.PsiManager.getInstance(project).findFile(file) ?: continue
