@@ -23,7 +23,7 @@ class YamlFunctionReference(
         return PsiShortNamesCache.getInstance(project).getMethodsByName(functionName, scope)
             .filter { method ->
                 !method.isConstructor && method.modifierList.annotations.any { annotation ->
-                    annotation.qualifiedName?.substringAfterLast('.') == "ProcessingFunctions"
+                    annotation.qualifiedName?.substringAfterLast('.') == "ProcessingFunction"
                 }
             }
             .map { PsiElementResolveResult(it) }

@@ -71,7 +71,7 @@ class YamlCompletionContributor : CompletionContributor() {
         val scope = ModuleUtilCore.findModuleForPsiElement(file)
             ?.getModuleWithDependenciesAndLibrariesScope(true)
             ?: GlobalSearchScope.allScope(file.project)
-        PsiShortNamesCache.getInstance(file.project).getClassesByName("ProcessingFunctions", scope)
+        PsiShortNamesCache.getInstance(file.project).getClassesByName("ProcessingFunction", scope)
             .filter { it.isAnnotationType }
             .forEach { annotation ->
                 AnnotatedElementsSearch.searchPsiMethods(annotation, scope).forEach { method ->

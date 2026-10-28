@@ -20,7 +20,9 @@ class YamlResourceFileReferenceContributor : PsiReferenceContributor() {
                     if (text.isEmpty()) return PsiReference.EMPTY_ARRAY
 
                     val references = mutableListOf<PsiReference>()
-                    val regex = Regex("ftl\\(([^)]+)\\)")
+                    // Computed arguments are expressions, not file paths. Do not overlap
+                    // references inside nested calls (for example ftl($(... + #get(...)))).
+                    val regex = Regex("ftl\\(([^()]+)\\)")
                     val matches = regex.findAll(text)
 
                     val elementText = scalar.text
