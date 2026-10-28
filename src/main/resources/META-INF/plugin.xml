@@ -17,6 +17,11 @@
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
+        <psi.referenceContributor language="Gherkin"
+                                  implementation="org.chronos.intellij.reference.ProjectCucumberStepReferenceContributor"/>
+        <completion.contributor language="Gherkin" order="first"
+                                implementationClass="org.chronos.intellij.completion.ProjectCucumberCompletionContributor"/>
+
         <iconProvider implementation="org.chronos.intellij.search.YamlIconProvider"/>
         <fileBasedIndex implementation="org.chronos.intellij.YamlCucumberStepIndex"/>
         <fileBasedIndex implementation="org.chronos.intellij.YamlToUiElementIndex"/>
