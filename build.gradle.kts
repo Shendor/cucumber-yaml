@@ -103,6 +103,19 @@ tasks {
         <li><b>1.1.0</b> <em>(2026-07-01)</em> - Added support of references from property key to property declarations in .properties or .yaml files.
         Added support of references from ftl file path to file</li>
         <li><b>1.2.0</b> <em>(2026-12-01)</em> - Improved colour scheme and option to edit it</li>
+        <li><b>Updates since 1.2.0</b> <em>(2026-10-28)</em>
+          <ul>
+            <li>Updated compatibility to IntelliJ IDEA 2026.2.3 (build 262).</li>
+            <li>Added YAML function completion after <code>#</code> and navigation to Java methods annotated with <code>@ProcessingFunction</code>, including dependency methods.</li>
+            <li>Fixed function selection inside nested expressions such as <code>ftl($('data/test-data-'+#get('id')+'.ftl'))</code>, so only <code>#get</code> is selected.</li>
+            <li>Restricted Java Cucumber step navigation and completion to sources in the feature's module and dependent project modules, excluding external libraries and attached library sources.</li>
+            <li>Added navigation from YAML <code>page</code> values to Java <code>@PageAccessor</code> classes and improved <code>element</code> references to <code>@Locator</code> declarations.</li>
+            <li>Added Find Usages and gutter navigation from Java page and locator declarations to their YAML usages.</li>
+            <li>Added bidirectional navigation between YAML <code>test</code>/<code>data-test</code> and matching <code>name</code> values, with navigation from test definitions to Java and Cucumber usages.</li>
+            <li>Fixed YAML parent reference ownership and text ranges, and improved step usage searches to avoid recursive resolution and duplicate targets.</li>
+            <li>Improved property placeholder handling for default values, avoiding false unresolved-property warnings.</li>
+          </ul>
+        </li>
       </ul>
     """
         )
